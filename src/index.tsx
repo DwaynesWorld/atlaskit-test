@@ -1,25 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { App } from "./app";
+import { ThemeProvider, themes } from "hcss-components";
+import { BrowserRouter } from "react-router-dom";
 
-const App = () => {
-  return (
-    <div
-      style={{
-        fontFamily: "Helvetica",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "300px",
-        width: "100vw"
-      }}
-    >
-      <p>Close the dev server and run</p>
-      <pre>yarn hcss-init</pre>
-      <p>or</p>
-      <pre>npm run hcss-init</pre>
-    </div>
-  );
-};
+const AppWithProviders = () => (
+  <BrowserRouter>
+    <ThemeProvider theme={themes.preConstruction}>
+      <App />
+    </ThemeProvider>
+  </BrowserRouter>
+);
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<AppWithProviders />, document.getElementById("root"));
