@@ -1,6 +1,6 @@
 import { Component, ReactChild } from "react";
 
-interface IProps {
+interface Props {
   children: ReactChild;
   blockOnChange: boolean;
 
@@ -16,8 +16,8 @@ interface IProps {
  * For example, if you know you do not want to re-render
  * when a certain prop changes (use with care).
  */
-export class RenderBlocker extends Component<IProps> {
-  shouldComponentUpdate(prevProps: IProps) {
+export class RenderBlocker extends Component<Props> {
+  shouldComponentUpdate(prevProps: Props) {
     const { blockOnChange, children, ...props } = this.props;
 
     const propsChanged = Object.keys(props).some(

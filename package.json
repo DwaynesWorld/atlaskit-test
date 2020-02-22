@@ -9,6 +9,7 @@
     "hcss-hooks": "^3.6.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-fast-compare": "2.0.1",
     "react-localization": "^1.0.15",
     "react-router-dom": "^5.0.0",
     "react-transition-group": "^4.3.0",

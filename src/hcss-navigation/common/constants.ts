@@ -17,3 +17,9 @@ const CACHE_KEY = "hcss.navigation.ui.state";
 export const PRODUCT_NAV_WIDTH_CACHE_KEY = CACHE_KEY + ".product.nav.width";
 export const NAV_COLLAPSED_STORE_CACHE_KEY = CACHE_KEY + ".collapsed.store";
 export const NAV_COLLAPSED_CACHE_KEY = CACHE_KEY + ".collapsed";
+
+export const RESIZE_CONTROL_HANDLE_OFFSET = 4;
+export const RESIZE_CONTROL_HANDLE_WIDTH = 2;
+export const RESIZE_CONTROL_INNER_WIDTH = 20;
+export const RESIZE_CONTROL_OUTER_WIDTH =
+  RESIZE_CONTROL_INNER_WIDTH + RESIZE_CONTROL_HANDLE_OFFSET;

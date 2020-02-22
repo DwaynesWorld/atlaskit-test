@@ -73,10 +73,9 @@ export const useUIController = (initialState: UIState) => {
   };
 
   return {
-    isResizing,
-    isResizeDisabled,
-    productNavWidth,
-    isCollapsed,
+    uiState: { isResizing, isResizeDisabled, productNavWidth, isCollapsed },
+    collapse,
+    expand,
     toggleCollapse,
     manualResizeStart,
     manualResizeEnd,

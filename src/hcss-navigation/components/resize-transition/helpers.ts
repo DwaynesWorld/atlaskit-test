@@ -1,5 +1,5 @@
 import { RESIZE_TRANSITION_DURATION } from "../../common/constants";
-import { TransitionState } from "../../models/transition-state";
+import { TransitionStatus } from "react-transition-group/Transition";
 
 export const camelToKebab = (str: string): string => {
   return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
@@ -19,9 +19,9 @@ export const getTransition = (keys: string[]) => {
 };
 
 export const getStyle = ({ keys, values }: any) => {
-  const style = {};
+  const style: any = {};
 
-  keys.forEach((k, i) => {
+  keys.forEach((k: any, i: any) => {
     style[k] = values[i];
   });
 
@@ -33,6 +33,6 @@ export const getChanges = (keys: string[]) => {
   return { willChange: props.join(",") };
 };
 
-export const isTransitioning = (state: TransitionState) => {
+export const isTransitioning = (state: TransitionStatus) => {
   return ["entering", "exiting"].includes(state);
 };

@@ -26,4 +26,4 @@ const useLayoutEventListener = ({
 const [provider, context] = constate(useLayoutEventListener);
 
 export const LayoutEventProvider = provider;
-export const userLayoutEventContext = context;
+export const useLayoutEventContext = context;

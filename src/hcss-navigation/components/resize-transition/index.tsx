@@ -1,13 +1,21 @@
-import React, { ReactChild, useState, useEffect } from "react";
+import React, { ReactNode } from "react";
 import Transition from "react-transition-group/Transition";
+import { TransitionStatus } from "react-transition-group/Transition";
 import { RESIZE_TRANSITION_DURATION } from "../../common/constants";
 import { getTransition, getStyle, getChanges } from "./helpers";
+
 import {
   CollapseListener,
   ExpandListener
 } from "../../models/collapse-listener";
+import { useIsMounted } from "hcss-navigation/common/is-mounted";
 
-interface IProps {
+interface TransitionProps {
+  transitionStyle: Object;
+  transitionState: TransitionStatus;
+}
+
+interface ResizeTransitionProps {
   in: boolean;
   from: Array<number | string>;
   to: Array<number | string>;
@@ -17,10 +25,7 @@ interface IProps {
   onExpandEnd?: ExpandListener;
   onCollapseStart?: CollapseListener;
   onCollapseEnd?: CollapseListener;
-  children: ({
-    transitionStyle: Object,
-    transitionState: TransitionState
-  }) => ReactChild;
+  children: (props: TransitionProps) => ReactNode;
 }
 
 export const ResizeTransition = ({
@@ -34,10 +39,8 @@ export const ResizeTransition = ({
   onCollapseStart,
   onCollapseEnd,
   children
-}: IProps) => {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => setIsMounted(true), []);
+}: ResizeTransitionProps) => {
+  const isMounted = useIsMounted();
 
   return (
     <Transition
@@ -52,6 +55,7 @@ export const ResizeTransition = ({
           !userIsDragging && isMounted ? getTransition(properties) : {};
 
         const dynamicProperties = {
+          unmounted: {},
           exiting: getStyle({ keys: properties, values: from }),
           exited: getStyle({ keys: properties, values: from }),
           entering: getStyle({ keys: properties, values: to }),

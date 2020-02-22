@@ -29,6 +29,7 @@ export const Shadow = ({
 
   return (
     <div
+      className="nav-shadow"
       style={{
         background: `linear-gradient(${direction}, ${colorStops})`,
         bottom: 0,

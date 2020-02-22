@@ -6,7 +6,7 @@ import { NotFound } from "./components/not-found";
 import { LoadingFallback } from "./components/loading-fallback";
 import {
   NavigationProvider,
-  LayoutManager,
+  // LayoutManager,
   HeaderSection,
   MenuSection,
   Item,
@@ -15,25 +15,28 @@ import {
   modeGenerator
 } from "@atlaskit/navigation-next";
 
+import { LayoutManager } from "hcss-navigation/components/layout-manager";
+import { NavigationControllerProvider } from "hcss-navigation/context/navigation-controller-context";
+
 const About = lazy(() => import("./pages/about"));
 
-const customMode = modeGenerator({
-  product: {
-    text: colors.N0,
-    background: colors.G500
-  }
-});
+// const customMode = modeGenerator({
+//   product: {
+//     text: colors.N0,
+//     background: colors.G500
+//   }
+// });
 
 const GlobalNavigation = () => {
   return (
-    <ThemeProvider
-      theme={(theme: any) => ({
-        ...theme,
-        mode: customMode,
-        context: "product"
-      })}>
-      <GlobalNav primaryItems={[]} secondaryItems={[]} />
-    </ThemeProvider>
+    // <ThemeProvider
+    //   theme={(theme: any) => ({
+    //     ...theme,
+    //     mode: customMode,
+    //     context: "product"
+    //   })}>
+    <GlobalNav primaryItems={[]} secondaryItems={[]} />
+    // </ThemeProvider>
   );
 };
 
@@ -58,32 +61,41 @@ const MyProductNavigation = () => (
 
 export const App = () => {
   return (
-    <SiteLayout>
-      <Suspense fallback={<LoadingFallback />}>
-        <NavigationProvider>
+    // <SiteLayout>
+    <Suspense fallback={<LoadingFallback />}>
+      <NavigationControllerProvider>
+        <FullHeightContainer>
           <LayoutManager
-            topOffset={44}
-            globalNavigation={GlobalNavigation}
-            productNavigation={MyProductNavigation}
-            containerNavigation={null}>
+            topOffset={0}
+            flyoutOnHover={true}
+            fullWidthFlyout={false}
+            hideNavVisuallyOnCollapse={false}
+            shouldHideGlobalNavShadow={false}
+            showContextualNavigation={true}
+            horizontalGlobalNav={false}
+            alternateFlyoutBehaviour={false}
+            globalNavigation={() => null}
+            productNavigation={() => null}
+            containerNavigation={() => null}>
             <ContentWrapper>
               <Switch>
-                <Route exact path="/">
-                  <About />
-                </Route>
-                <Route path="/">
-                  <NotFound />
-                </Route>
+                <Route exact path="/" component={About} />
               </Switch>
             </ContentWrapper>
           </LayoutManager>
-        </NavigationProvider>
-      </Suspense>
-    </SiteLayout>
+        </FullHeightContainer>
+      </NavigationControllerProvider>
+    </Suspense>
+    // </SiteLayout>
   );
 };
 
 const ContentWrapper = styled.div`
   width: 100%;
-  height: calc(100vh - 44px);
+  height: 100%;
+`;
+
+const FullHeightContainer = styled.div`
+  height: 100vh;
+  margin-top: 0;
 `;

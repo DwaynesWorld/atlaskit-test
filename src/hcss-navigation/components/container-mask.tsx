@@ -5,12 +5,12 @@ interface IProps {
 }
 
 export const ContainerMask = styled.div<IProps>`
-  --interaction: ${props => (props.disableInteraction ? "none" : "auto")};
+  --interaction: ${p => (p.disableInteraction ? "none" : "auto")};
 
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  height: "100%";
+  height: 100%;
   pointer-events: var(--interaction);
   user-select: var(--interaction);
 `;
