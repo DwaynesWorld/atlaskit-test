@@ -1,7 +1,6 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { useState, Fragment, useEffect, MutableRefObject } from "react";
-import { Icon } from "hcss-components";
 import { useNavigationControllerContext } from "hcss-navigation/context/navigation-controller-context";
 import { Shadow } from "hcss-navigation/common/shadow";
 import { ToggleButton } from "./toggle-button";
@@ -109,6 +108,8 @@ export const ResizeControl = ({
   };
 
   const handleResize = (e: MouseEvent) => {
+    console.log("handleResize", mouseIsDown);
+
     if (!mouseIsDown) return;
 
     if (!isDragging) {
@@ -174,7 +175,7 @@ export const ResizeControl = ({
     window.removeEventListener("mouseup", handleResizeEnd);
   };
 
-  const iconName = isCollapsed ? "chevron-right" : "chevron-left";
+  const Icon = isCollapsed ? ChevronRight : ChevronLeft;
 
   return (
     <OuterControl>
@@ -201,12 +202,50 @@ export const ResizeControl = ({
               aria-expanded={!isCollapsed}
               onClick={toggleCollapse}
               onMouseDown={e => e.preventDefault()}>
-              <Icon name={iconName} />
+              <Icon />
             </ToggleButton>
           </div>
         </Fragment>
       )}
     </OuterControl>
+  );
+};
+
+const ChevronLeft = () => {
+  return (
+    <span>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        focusable="false"
+        role="presentation">
+        <path
+          d="M13.706 9.698a.988.988 0 0 0 0-1.407 1.01 1.01 0 0 0-1.419 0l-2.965 2.94a1.09 1.09 0 0 0 0 1.548l2.955 2.93a1.01 1.01 0 0 0 1.42 0 .988.988 0 0 0 0-1.407l-2.318-2.297 2.327-2.307z"
+          fill="currentColor"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </span>
+  );
+};
+
+const ChevronRight = () => {
+  return (
+    <span>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        focusable="false"
+        role="presentation">
+        <path
+          d="M10.294 9.698a.988.988 0 0 1 0-1.407 1.01 1.01 0 0 1 1.419 0l2.965 2.94a1.09 1.09 0 0 1 0 1.548l-2.955 2.93a1.01 1.01 0 0 1-1.42 0 .988.988 0 0 1 0-1.407l2.318-2.297-2.327-2.307z"
+          fill="currentColor"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </span>
   );
 };
 
@@ -239,8 +278,8 @@ const updateResizeAreaPosition = (refs: MutationRef[], width: number) => {
 
 const OuterControl = styled.div`
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: 0px;
+  bottom: 0px;
   left: 100%;
   transform: translateZ(0);
   width: ${RESIZE_CONTROL_OUTER_WIDTH}px;

@@ -67,13 +67,13 @@ export const App = () => {
         <FullHeightContainer>
           <LayoutManager
             topOffset={0}
-            flyoutOnHover={true}
+            flyoutOnHover={false}
             fullWidthFlyout={false}
             hideNavVisuallyOnCollapse={false}
             shouldHideGlobalNavShadow={false}
             showContextualNavigation={true}
             horizontalGlobalNav={false}
-            alternateFlyoutBehaviour={false}
+            alternateFlyoutBehaviour={true}
             globalNavigation={() => null}
             productNavigation={() => null}
             containerNavigation={() => null}>

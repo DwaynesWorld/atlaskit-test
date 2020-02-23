@@ -18,6 +18,8 @@ export const ToggleButton = ({
 }: ToggleButtonProps) => {
   return (
     <Button
+      className="navigation-resize-button"
+      type="button"
       ref={r => (buttonRef.current = r || undefined)}
       hasHighlight={hasHighlight}
       isVisible={isVisible}
@@ -34,7 +36,7 @@ interface ButtonProps {
 }
 const Button = styled.button<ButtonProps>`
   position: absolute;
-  top: 32;
+  top: 32px;
   height: 24px;
   width: 24px;
   cursor: pointer;
@@ -54,19 +56,19 @@ const Button = styled.button<ButtonProps>`
     transform 300ms cubic-bezier(0.2, 0, 0, 1);
   transform: translate(-50%);
 
-  :hover {
-    background-color: "#4C9AFF";
+  &:hover {
+    background-color: #4c9aff;
     color: white;
   }
 
-  :active {
-    background-color: "#2684FF";
+  &:active {
+    background-color: #2684ff;
     color: white;
   }
 
-  :focus {
+  &:focus {
     opacity: 1;
-    background-color: "#2684FF";
+    background-color: #2684ff;
     color: white;
   }
 `;
@@ -75,16 +77,16 @@ const HitArea = styled.div`
   position: absolute;
 
   &.small {
-    top: -4;
-    right: -4;
-    bottom: -4;
-    left: -4;
+    top: -4px;
+    right: -4px;
+    bottom: -4px;
+    left: -4px;
   }
 
   &.large {
-    top: -8;
-    right: -12;
-    bottom: -8;
-    left: -8;
+    top: -8px;
+    right: -12px;
+    bottom: -8px;
+    left: -8px;
   }
 `;

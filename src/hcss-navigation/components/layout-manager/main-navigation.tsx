@@ -178,7 +178,7 @@ const NavigationContainer = styled.div<StyledProps>`
   z-index: ${NAVIGATION_LAYER_ZINDEX};
   background-color: red;
 
-  &:hover {
+  &:hover .navigation-resize-button {
     opacity: 1;
   }
 `;

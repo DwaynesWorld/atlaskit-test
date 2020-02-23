@@ -79,12 +79,13 @@ const ContentCollapsed = styled.div<{ hasContainer: boolean }>`
   width: ${CONTENT_NAV_WIDTH_COLLAPSED}px;
   transition: background-color 100ms;
 
-  :hover {
-    background-color: ${p =>
-      p.hasContainer ? "#FFFFFF" : "rgba(255, 255, 255, 0.08)"};
+  &:hover {
+    /* background-color: ${p =>
+      p.hasContainer ? "#EBECF0" : "rgba(255, 255, 255, 0.08)"}; */
+    background-color: rgba(255, 255, 255, 0.08);
   }
 
-  :active {
+  &:active {
     background-color: rgba(9, 30, 66, 0.13);
   }
 `;

@@ -28,9 +28,9 @@ export const GrabArea = ({
 const OuterGrabArea = styled.div`
   cursor: ew-resize;
   position: relative;
-  left: -${RESIZE_CONTROL_HANDLE_OFFSET};
+  left: -${RESIZE_CONTROL_HANDLE_OFFSET}px;
   height: 100%;
-  width: ${RESIZE_CONTROL_OUTER_WIDTH};
+  width: ${RESIZE_CONTROL_OUTER_WIDTH}px;
 `;
 
 const InnerGrabArea = styled.div<InnerGrabAreaProps>`
