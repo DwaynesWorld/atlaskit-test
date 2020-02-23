@@ -27,7 +27,7 @@ const Outer = styled.div`
   background-color: #006644;
   color: #ffffff;
 
-  :not(:only-child) {
+  &:not(:only-child) {
     z-index: -1;
   }
 `;

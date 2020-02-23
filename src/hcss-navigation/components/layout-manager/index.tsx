@@ -47,6 +47,7 @@ export const LayoutManager = ({
         topOffset={topOffset}
         flyoutOnHover={flyoutOnHover}
         flyoutIsOpen={flyoutIsOpen}
+        setFlyoutIsOpen={o => setFlyoutIsOpen(o)}
         fullWidthFlyout={fullWidthFlyout}
         hideNavVisuallyOnCollapse={hideNavVisuallyOnCollapse}
         shouldHideGlobalNavShadow={shouldHideGlobalNavShadow}
@@ -82,7 +83,7 @@ const LayoutContainer = styled.div<Props>`
   display: flex;
   flex-direction: row;
   --top-offset: ${props => (props.topOffset ? props.topOffset : 0)}px
-  height: calc(100vh - var(--topOffset));
+  height: calc(100vh - var(--top-offset));
   margin-top: var(--top-offset);
   background-color: blue;
 `;

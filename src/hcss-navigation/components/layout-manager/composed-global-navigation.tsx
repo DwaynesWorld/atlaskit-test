@@ -8,7 +8,7 @@ interface Props {
   alternateFlyoutBehaviour: boolean;
   containerNavigation?: ComponentType<{}>;
   globalNavigation: ComponentType<{}>;
-  closeFlyout: () => void;
+  closeFlyout?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 export const ComposedGlobalNavigation = ({

@@ -10,7 +10,23 @@ import {
   NAV_COLLAPSED_STORE_CACHE_KEY
 } from "../common/constants";
 
-export const useUIController = (initialState: UIState) => {
+export interface UIController {
+  uiState: {
+    isResizing: boolean;
+    isResizeDisabled: boolean;
+    productNavWidth: number;
+    isCollapsed: boolean;
+  };
+  collapse: () => void;
+  expand: () => void;
+  toggleCollapse: () => void;
+  manualResizeStart: (resize: Resize) => void;
+  manualResizeEnd: (resize: Resize) => void;
+  enableResize: () => void;
+  disableResize: () => void;
+}
+
+export const useUIController = (initialState: UIState): UIController => {
   const [isResizing, setIsResizing] = useState(false);
 
   const [isResizeDisabled, setIsResizeDisabled] = useState(
