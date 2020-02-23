@@ -1,10 +1,10 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
-import { useState, Fragment, useEffect, MutableRefObject } from "react";
-import { useNavigationControllerContext } from "hcss-navigation/context/navigation-controller-context";
+import { Fragment, MutableRefObject } from "react";
 import { Shadow } from "hcss-navigation/common/shadow";
 import { ToggleButton } from "./toggle-button";
 import { GrabArea } from "./grab-area";
+import { UIController } from "hcss-navigation/controller/ui-controller";
 
 import {
   RESIZE_CONTROL_OUTER_WIDTH,
@@ -27,57 +27,92 @@ interface ResizeControlProps {
   isGrabAreaDisabled: boolean;
   mutationRefs: MutationRef[];
   toggleButtonRef: MutableRefObject<HTMLButtonElement | undefined>;
+  controller: UIController;
   onMouseOverButtonBuffer?: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => void;
 }
-export const ResizeControl = ({
-  flyoutOnHover,
-  flyoutIsOpen,
-  isGrabAreaDisabled,
-  mutationRefs,
-  toggleButtonRef,
-  onMouseOverButtonBuffer
-}: ResizeControlProps) => {
-  const shadowDirection = flyoutIsOpen ? "to right" : "to left";
-  const controller = useNavigationControllerContext();
-  const { productNavWidth, isResizeDisabled, isCollapsed } = controller.uiState;
-  const [didDragOpen, setDidDragOpen] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [mouseIsDown, setMouseIsDown] = useState(false);
-  const [mouseIsOverGrabArea, setMouseIsOverGrabArea] = useState(false);
-  const [showGrabArea, setShowGrabArea] = useState(true);
-  const [invalidDragAttempted, setInvalidDragAttempted] = useState(false);
-  const [delta, setDelta] = useState(0);
-  const [initialWidth, setInitialWidth] = useState(0);
-  const [initialX, setInitialX] = useState(0);
-  const [width, setWidth] = useState(productNavWidth);
 
-  useEffect(() => {
+interface ResizeControlState {
+  didDragOpen: boolean;
+  isDragging: boolean;
+  mouseIsDown: boolean;
+  mouseIsOverGrabArea: boolean;
+  showGrabArea: boolean;
+  delta: number;
+  initialWidth: number;
+  initialX: number;
+  width: number;
+}
+export class ResizeControl extends React.Component<
+  ResizeControlProps,
+  ResizeControlState
+> {
+  invalidDragAttempted: boolean = false;
+
+  constructor(props: ResizeControlProps) {
+    super(props);
+
+    const { controller } = props;
+    const { productNavWidth } = controller.uiState;
+
+    this.state = {
+      didDragOpen: false,
+      isDragging: false,
+      mouseIsDown: false,
+      mouseIsOverGrabArea: false,
+      showGrabArea: true,
+      delta: 0,
+      initialWidth: 0,
+      initialX: 0,
+      width: productNavWidth
+    };
+  }
+
+  static getDerivedStateFromProps(
+    props: ResizeControlProps,
+    state: ResizeControlState
+  ) {
+    const { controller, flyoutOnHover, flyoutIsOpen } = props;
+    const { isCollapsed } = controller.uiState;
+    const { mouseIsOverGrabArea: current } = state;
+
+    // resolve "hover locking" issue with resize grab area
     if (flyoutOnHover) {
-      const _showGrabArea = !isCollapsed && !flyoutIsOpen;
-      const _mouseIsOverGrabArea = _showGrabArea ? mouseIsOverGrabArea : false;
-      setShowGrabArea(_showGrabArea);
-      setMouseIsOverGrabArea(_mouseIsOverGrabArea);
+      const showGrabArea = !isCollapsed && !flyoutIsOpen;
+      const mouseIsOverGrabArea = showGrabArea ? current : false;
+
+      return {
+        mouseIsOverGrabArea,
+        showGrabArea
+      };
     }
-  }, [flyoutIsOpen, flyoutOnHover, isCollapsed, mouseIsOverGrabArea]);
 
-  const toggleCollapse = () => controller.toggleCollapse();
-  const mouseEnterGrabArea = () => setMouseIsOverGrabArea(true);
-  const mouseLeaveGrabArea = () => setMouseIsOverGrabArea(false);
+    return null;
+  }
 
-  const handleResizeStart = (e: ReactMouseEvent) => {
-    setInitialX(e.pageX);
-    setMouseIsDown(true);
-    window.addEventListener("mousemove", handleResize);
-    window.addEventListener("mouseup", handleResizeEnd);
+  toggleCollapse = () => this.props.controller.toggleCollapse();
+  mouseEnterGrabArea = () => this.setState({ mouseIsOverGrabArea: true });
+  mouseLeaveGrabArea = () => this.setState({ mouseIsOverGrabArea: false });
+
+  handleResizeStart = (e: ReactMouseEvent) => {
+    this.setState({
+      initialX: e.pageX,
+      mouseIsDown: true
+    });
+
+    window.addEventListener("mousemove", this.handleResize);
+    window.addEventListener("mouseup", this.handleResizeEnd);
   };
 
-  const initializeDrag = (e: MouseEvent) => {
+  initializeDrag = (e: MouseEvent) => {
+    const { controller } = this.props;
+    const { isCollapsed, productNavWidth } = controller.uiState;
+    const { initialX } = this.state;
     const delta = e.pageX - initialX;
 
     if (isCollapsed && delta <= 0) {
-      setInvalidDragAttempted(true);
+      this.invalidDragAttempted = true;
       return;
     }
 
@@ -102,35 +137,50 @@ export const ResizeControl = ({
       });
     }
 
-    setDidDragOpen(didDragOpen);
-    setInitialWidth(initialWidth);
-    setIsDragging(true);
+    this.setState({
+      didDragOpen,
+      initialWidth,
+      isDragging: true
+    });
   };
 
-  const handleResize = (e: MouseEvent) => {
-    console.log("handleResize", mouseIsDown);
+  handleResize = (e: MouseEvent) => {
+    const { mutationRefs } = this.props;
+    const {
+      mouseIsDown,
+      isDragging,
+      initialX,
+      initialWidth,
+      width
+    } = this.state;
 
     if (!mouseIsDown) return;
 
     if (!isDragging) {
-      initializeDrag(e);
+      this.initializeDrag(e);
       return;
     }
 
     const r = calculatePositionChange(e.pageX, initialX, initialWidth);
     updateResizeAreaPosition(mutationRefs, width);
     if (e.clientX < 0) {
-      setWidth(CONTENT_NAV_WIDTH_COLLAPSED);
-      handleResizeEnd();
+      this.setState({ width: CONTENT_NAV_WIDTH_COLLAPSED });
+      this.handleResizeEnd();
     } else {
-      setDelta(r.delta);
-      setWidth(r.width);
+      this.setState({
+        delta: r.delta,
+        width: r.width
+      });
     }
   };
 
-  const handleResizeEnd = () => {
+  handleResizeEnd = () => {
+    const { controller, mutationRefs } = this.props;
+    const { isCollapsed } = controller.uiState;
+    const { isDragging, width, didDragOpen, delta } = this.state;
+
     const expandThreshold = 24;
-    const resizerClicked = !isDragging && !invalidDragAttempted;
+    const resizerClicked = !isDragging && !this.invalidDragAttempted;
     const currentWidth = width;
 
     let publishWidth = currentWidth;
@@ -138,7 +188,7 @@ export const ResizeControl = ({
 
     if (resizerClicked) {
       publishWidth = Math.max(CONTENT_NAV_WIDTH, currentWidth);
-      toggleCollapse();
+      this.toggleCollapse();
     }
 
     if (publishWidth < CONTENT_NAV_WIDTH) {
@@ -153,11 +203,13 @@ export const ResizeControl = ({
       shouldCollapse = isCollapsed;
     }
 
-    setInvalidDragAttempted(false);
-    setDidDragOpen(false);
-    setIsDragging(false);
-    setMouseIsDown(false);
-    setWidth(publishWidth);
+    this.invalidDragAttempted = true;
+    this.setState({
+      didDragOpen: false,
+      isDragging: false,
+      mouseIsDown: false,
+      width: publishWidth
+    });
 
     controller.manualResizeEnd({
       productNavWidth: publishWidth,
@@ -171,45 +223,64 @@ export const ResizeControl = ({
       updateResizeAreaPosition(mutationRefs, CONTENT_NAV_WIDTH);
     }
 
-    window.removeEventListener("mousemove", handleResize);
-    window.removeEventListener("mouseup", handleResizeEnd);
+    window.removeEventListener("mousemove", this.handleResize);
+    window.removeEventListener("mouseup", this.handleResizeEnd);
   };
 
-  const Icon = isCollapsed ? ChevronRight : ChevronLeft;
+  render() {
+    const {
+      flyoutIsOpen,
+      isGrabAreaDisabled,
+      controller,
+      onMouseOverButtonBuffer,
+      toggleButtonRef
+    } = this.props;
 
-  return (
-    <OuterControl>
-      {isDragging && <DragCursor />}
-      <Shadow direction={shadowDirection} isBold={mouseIsDown} />
-      {!isResizeDisabled && (
-        <Fragment>
-          {!isGrabAreaDisabled && showGrabArea && (
-            <GrabArea
-              isBold={mouseIsDown}
-              showHandle={mouseIsDown || mouseIsOverGrabArea}
-              onMouseEnter={mouseEnterGrabArea}
-              onMouseLeave={mouseLeaveGrabArea}
-              onMouseDown={handleResizeStart}
-            />
-          )}
-          <div
-            onMouseOver={!flyoutIsOpen ? onMouseOverButtonBuffer : undefined}>
-            <ToggleButton
-              isVisible={isCollapsed || mouseIsDown}
-              hasHighlight={mouseIsDown || mouseIsOverGrabArea}
-              islargeHitArea={onMouseOverButtonBuffer ? true : false}
-              buttonRef={toggleButtonRef}
-              aria-expanded={!isCollapsed}
-              onClick={toggleCollapse}
-              onMouseDown={e => e.preventDefault()}>
-              <Icon />
-            </ToggleButton>
-          </div>
-        </Fragment>
-      )}
-    </OuterControl>
-  );
-};
+    const {
+      isDragging,
+      mouseIsDown,
+      showGrabArea,
+      mouseIsOverGrabArea
+    } = this.state;
+
+    const { isResizeDisabled, isCollapsed } = controller.uiState;
+    const shadowDirection = flyoutIsOpen ? "to right" : "to left";
+    const Icon = isCollapsed ? ChevronRight : ChevronLeft;
+
+    return (
+      <OuterControl>
+        {isDragging && <DragCursor />}
+        <Shadow direction={shadowDirection} isBold={mouseIsDown} />
+        {!isResizeDisabled && (
+          <Fragment>
+            {!isGrabAreaDisabled && showGrabArea && (
+              <GrabArea
+                isBold={mouseIsDown}
+                showHandle={mouseIsDown || mouseIsOverGrabArea}
+                onMouseEnter={this.mouseEnterGrabArea}
+                onMouseLeave={this.mouseLeaveGrabArea}
+                onMouseDown={this.handleResizeStart}
+              />
+            )}
+            <div
+              onMouseOver={!flyoutIsOpen ? onMouseOverButtonBuffer : undefined}>
+              <ToggleButton
+                isVisible={isCollapsed || mouseIsDown}
+                hasHighlight={mouseIsDown || mouseIsOverGrabArea}
+                islargeHitArea={onMouseOverButtonBuffer ? true : false}
+                buttonRef={toggleButtonRef}
+                aria-expanded={!isCollapsed}
+                onClick={this.toggleCollapse}
+                onMouseDown={e => e.preventDefault()}>
+                <Icon />
+              </ToggleButton>
+            </div>
+          </Fragment>
+        )}
+      </OuterControl>
+    );
+  }
+}
 
 const ChevronLeft = () => {
   return (
@@ -223,7 +294,7 @@ const ChevronLeft = () => {
         <path
           d="M13.706 9.698a.988.988 0 0 0 0-1.407 1.01 1.01 0 0 0-1.419 0l-2.965 2.94a1.09 1.09 0 0 0 0 1.548l2.955 2.93a1.01 1.01 0 0 0 1.42 0 .988.988 0 0 0 0-1.407l-2.318-2.297 2.327-2.307z"
           fill="currentColor"
-          fill-rule="evenodd"
+          fillRule="evenodd"
         />
       </svg>
     </span>
@@ -242,7 +313,7 @@ const ChevronRight = () => {
         <path
           d="M10.294 9.698a.988.988 0 0 1 0-1.407 1.01 1.01 0 0 1 1.419 0l2.965 2.94a1.09 1.09 0 0 1 0 1.548l-2.955 2.93a1.01 1.01 0 0 1-1.42 0 .988.988 0 0 1 0-1.407l2.318-2.297-2.327-2.307z"
           fill="currentColor"
-          fill-rule="evenodd"
+          fillRule="evenodd"
         />
       </svg>
     </span>

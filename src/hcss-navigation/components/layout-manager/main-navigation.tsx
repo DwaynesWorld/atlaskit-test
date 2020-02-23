@@ -13,7 +13,9 @@ import { ResizeControl } from "../resize-control";
 import {
   CONTENT_NAV_WIDTH_COLLAPSED,
   CONTENT_NAV_WIDTH_FLYOUT,
-  NAVIGATION_LAYER_ZINDEX
+  NAVIGATION_LAYER_ZINDEX,
+  ALTERNATE_FLYOUT_DELAY,
+  FLYOUT_DELAY
 } from "hcss-navigation/common/constants";
 
 type ReactMouseEvent = React.MouseEvent<HTMLDivElement, MouseEvent>;
@@ -21,13 +23,14 @@ type ReactMouseEvent = React.MouseEvent<HTMLDivElement, MouseEvent>;
 interface NavigationProps {
   topOffset?: number;
   flyoutOnHover: boolean;
-  flyoutIsOpen: boolean;
   fullWidthFlyout: boolean;
   hideNavVisuallyOnCollapse: boolean;
   shouldHideGlobalNavShadow: boolean;
   showContextualNavigation: boolean;
   horizontalGlobalNav: boolean;
   alternateFlyoutBehaviour: boolean;
+  flyoutIsOpen: boolean;
+  setFlyoutIsOpen: (open: boolean) => void;
   pageRef: MutableRefObject<HTMLDivElement | undefined>;
   toggleButtonRef: MutableRefObject<HTMLButtonElement | undefined>;
   globalNavigation: ComponentType<{}>;
@@ -38,6 +41,7 @@ export const Navigation = ({
   topOffset,
   flyoutOnHover,
   flyoutIsOpen,
+  setFlyoutIsOpen,
   fullWidthFlyout,
   hideNavVisuallyOnCollapse,
   shouldHideGlobalNavShadow,
@@ -52,8 +56,9 @@ export const Navigation = ({
 }: NavigationProps) => {
   const navigationRef = useRef<HTMLDivElement>();
   const productRef = useRef<HTMLDivElement>();
-  const flyoutTimeout = useRef<NodeJS.Timeout>();
-  const { uiState, expand } = useNavigationControllerContext();
+  const flyoutTimeout = useRef<number>();
+  const controller = useNavigationControllerContext();
+  const { uiState, expand } = controller;
   const { isCollapsed, isResizing, productNavWidth } = uiState;
   const [itemIsDragging, setItemIsDragging] = useState(false);
 
@@ -61,18 +66,33 @@ export const Navigation = ({
     ? productNavWidth
     : CONTENT_NAV_WIDTH_FLYOUT;
 
-  // TODO: Implement FLyout
-  const onMouseOut = (e: ReactMouseEvent) => {
-    console.log("onMouseOut");
+  const onMouseOut = ({ currentTarget, relatedTarget }: ReactMouseEvent) => {
+    if (!isCollapsed || !flyoutOnHover || !flyoutIsOpen) return;
+    if (currentTarget.contains(relatedTarget as Node)) return;
+    if (flyoutTimeout.current) clearTimeout(flyoutTimeout.current);
+    setFlyoutIsOpen(false);
   };
-  const onMouseOver = (e: ReactMouseEvent) => {
-    console.log("onMouseOver");
+
+  const onMouseOver = ({ currentTarget, relatedTarget }: ReactMouseEvent) => {
+    if (!isCollapsed || !flyoutOnHover || flyoutIsOpen) return;
+    if (currentTarget.contains(relatedTarget as Node)) return;
+    if (flyoutTimeout.current) clearTimeout(flyoutTimeout.current);
+
+    const delay = alternateFlyoutBehaviour
+      ? ALTERNATE_FLYOUT_DELAY
+      : FLYOUT_DELAY;
+
+    flyoutTimeout.current = setTimeout(() => setFlyoutIsOpen(true), delay);
   };
+
   const onMouseLeave = (e: ReactMouseEvent) => {
-    console.log("onMouseLeaves");
+    if (flyoutTimeout.current) clearTimeout(flyoutTimeout.current);
   };
-  const closeFlyout = () => {
-    console.log("closeFlyout");
+
+  const closeFlyout = (e: ReactMouseEvent) => {
+    e.stopPropagation();
+    if (flyoutTimeout.current) clearTimeout(flyoutTimeout.current);
+    if (flyoutIsOpen) setFlyoutIsOpen(false);
   };
 
   return (
@@ -146,6 +166,7 @@ export const Navigation = ({
         </ContainerMask>
         {showContextualNavigation && (
           <ResizeControl
+            controller={controller}
             flyoutOnHover={flyoutOnHover}
             flyoutIsOpen={flyoutIsOpen}
             isGrabAreaDisabled={itemIsDragging}

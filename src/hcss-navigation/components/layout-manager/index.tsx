@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactNode, ComponentType } from "react";
 import { Navigation } from "./main-navigation";
 import { CollapseListeners } from "../../models/collapse-listener";
 import { PageContent } from "./page-content";
+import { useNavigationControllerContext } from "hcss-navigation/context/navigation-controller-context";
 
 interface LayoutManagerProps {
   topOffset?: number;
@@ -39,7 +40,16 @@ export const LayoutManager = ({
 }: LayoutManagerProps & CollapseListeners) => {
   const pageRef = useRef<HTMLDivElement>();
   const toggleButtonRef = useRef<HTMLButtonElement>();
+  const controller = useNavigationControllerContext();
   const [flyoutIsOpen, setFlyoutIsOpen] = useState(false);
+
+  useEffect(() => {
+    // This happens on button click
+    // TODO: Move flyout is open to controller
+    if (!controller.uiState.isCollapsed && flyoutIsOpen) {
+      setFlyoutIsOpen(false);
+    }
+  }, [controller.uiState.isCollapsed, flyoutIsOpen]);
 
   return (
     <LayoutContainer topOffset={topOffset}>
