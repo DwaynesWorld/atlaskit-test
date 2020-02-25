@@ -5,19 +5,19 @@ import {
   transitionTimingFunction
 } from "../../common/constants";
 
-interface Props {
+interface ContextNavigationWrapperProps {
   isEntering: boolean;
   isExiting: boolean;
   isVisible: boolean;
   children: ReactNode;
 }
 
-export const ContainerNavigation = ({
+export const ContextNavigationWrapper = ({
   isEntering,
   isExiting,
   isVisible,
   children
-}: Props) => {
+}: ContextNavigationWrapperProps) => {
   return (
     <Outer isEntering={isEntering} isExiting={isExiting}>
       <Inner isVisible={isVisible}>{children}</Inner>

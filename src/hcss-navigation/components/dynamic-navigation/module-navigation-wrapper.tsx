@@ -1,13 +1,16 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-import { CONTENT_NAV_WIDTH } from "hcss-navigation/common/constants";
+import { DYNAMIC_NAV_WIDTH } from "hcss-navigation/common/constants";
 
-interface Props {
+interface ModuleNavigationWrapperProps {
   isVisible: boolean;
   children: ReactNode;
 }
 
-export const ProductNavigation = ({ isVisible, children }: Props) => (
+export const ModuleNavigationWrapper = ({
+  isVisible,
+  children
+}: ModuleNavigationWrapperProps) => (
   <Outer>
     <Inner isVisible={isVisible} tabIndex={-1} role="group">
       {children}
@@ -22,7 +25,7 @@ const Outer = styled.div`
   height: 100%;
   width: 100%;
   position: absolute;
-  min-width: ${CONTENT_NAV_WIDTH}px;
+  min-width: ${DYNAMIC_NAV_WIDTH}px;
   overflow-x: hidden;
   background-color: #006644;
   color: #ffffff;

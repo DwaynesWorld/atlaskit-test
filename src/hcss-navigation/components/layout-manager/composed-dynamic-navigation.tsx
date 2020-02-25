@@ -2,67 +2,67 @@ import React, { ComponentType, MutableRefObject } from "react";
 import styled from "styled-components";
 import { TransitionStatus } from "react-transition-group/Transition";
 import { isTransitioning } from "../resize-transition/helpers";
-import { ContentNavigation } from "../content-navigation";
-import { CONTENT_NAV_WIDTH_COLLAPSED } from "hcss-navigation/common/constants";
+import { DynamicNavigation } from "../dynamic-navigation";
+import { DYNAMIC_NAV_WIDTH_COLLAPSED } from "hcss-navigation/common/constants";
 
-interface Props {
+interface ComposedDynamicNavigationProps {
   flyoutOnHover: boolean;
   isCollapsed: boolean;
   isResizing: boolean;
   hideNavVisuallyOnCollapse: boolean;
-  containerNavigation?: ComponentType<{}>;
-  productNavigation: ComponentType<{}>;
+  contextNavigation?: ComponentType<{}>;
+  moduleNavigation: ComponentType<{}>;
   transitionState: TransitionStatus;
   transitionStyle: Object;
-  productNavigationRef: MutableRefObject<HTMLDivElement | undefined>;
+  moduleNavigationRef: MutableRefObject<HTMLDivElement | undefined>;
   expand: () => void;
 }
 
-export const ComposedContainerNavigation = ({
-  containerNavigation,
+export const ComposedDynamicNavigation = ({
+  contextNavigation,
   flyoutOnHover,
-  productNavigation,
+  moduleNavigation,
   transitionState,
   transitionStyle,
   isCollapsed,
   isResizing,
   hideNavVisuallyOnCollapse,
-  productNavigationRef,
+  moduleNavigationRef,
   expand
-}: Props) => {
+}: ComposedDynamicNavigationProps) => {
   const isVisible = transitionState !== "exited";
   const disableInteraction = isResizing || isTransitioning(transitionState);
 
   return (
-    <ContentNavigationWrapper
-      key="product-nav-wrapper"
-      ref={ref => (productNavigationRef.current = ref || undefined)}
+    <DynamicNavigationWrapper
+      key="dynamic-nav-wrapper"
+      ref={ref => (moduleNavigationRef.current = ref || undefined)}
       disableInteraction={disableInteraction}
       style={transitionStyle}>
-      <ContentNavigation
-        key="produc-nav"
-        container={containerNavigation}
+      <DynamicNavigation
+        key="dynamic-nav"
         isVisible={isVisible}
-        product={productNavigation}
         hideNavVisuallyOnCollapse={hideNavVisuallyOnCollapse}
+        moduleNavigation={moduleNavigation}
+        contextNavigation={contextNavigation}
       />
       {isCollapsed && !flyoutOnHover && (
         <ContentCollapsed
           role="button"
           tabIndex={-1}
           onClick={expand}
-          hasContainer={containerNavigation ? true : false}
+          hasContext={contextNavigation ? true : false}
         />
       )}
-    </ContentNavigationWrapper>
+    </DynamicNavigationWrapper>
   );
 };
 
-interface StyledProps {
+interface DynamicNavigationWrapperProps {
   disableInteraction: boolean;
 }
 
-const ContentNavigationWrapper = styled.div<StyledProps>`
+const DynamicNavigationWrapper = styled.div<DynamicNavigationWrapperProps>`
   --interaction: ${p => (p.disableInteraction ? "none" : "auto")};
 
   height: 100%;
@@ -71,17 +71,17 @@ const ContentNavigationWrapper = styled.div<StyledProps>`
   user-select: var(--interaction);
 `;
 
-const ContentCollapsed = styled.div<{ hasContainer: boolean }>`
+const ContentCollapsed = styled.div<{ hasContext: boolean }>`
   cursor: pointer;
   outline: 0;
   position: absolute;
   height: 100%;
-  width: ${CONTENT_NAV_WIDTH_COLLAPSED}px;
+  width: ${DYNAMIC_NAV_WIDTH_COLLAPSED}px;
   transition: background-color 100ms;
 
   &:hover {
     /* background-color: ${p =>
-      p.hasContainer ? "#EBECF0" : "rgba(255, 255, 255, 0.08)"}; */
+      p.hasContext ? "#EBECF0" : "rgba(255, 255, 255, 0.08)"}; */
     background-color: rgba(255, 255, 255, 0.08);
   }
 

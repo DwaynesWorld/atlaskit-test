@@ -3,19 +3,19 @@ import styled from "styled-components";
 import { useState, useRef, Fragment, ComponentType } from "react";
 import { LayoutEventProvider } from "../../context/layout-event-context";
 import { useNavigationControllerContext } from "../../context/navigation-controller-context";
-import { ContainerMask } from "../container-mask";
 import { RenderBlocker } from "../../common/render-blocker";
 import { ComposedGlobalNavigation } from "./composed-global-navigation";
-import { ComposedContainerNavigation } from "./composed-container-navigation";
+import { ComposedDynamicNavigation } from "./composed-dynamic-navigation";
 import { ResizeTransition } from "../resize-transition";
 import { ResizeControl } from "../resize-control";
 
 import {
-  CONTENT_NAV_WIDTH_COLLAPSED,
-  CONTENT_NAV_WIDTH_FLYOUT,
+  DYNAMIC_NAV_WIDTH_COLLAPSED,
+  DYNAMIC_NAV_WIDTH_FLYOUT,
   NAVIGATION_LAYER_ZINDEX,
   ALTERNATE_FLYOUT_DELAY,
-  FLYOUT_DELAY
+  FLYOUT_DELAY,
+  HORIZONTAL_GLOBAL_NAV_HEIGHT
 } from "hcss-navigation/common/constants";
 
 type ReactMouseEvent = React.MouseEvent<HTMLDivElement, MouseEvent>;
@@ -34,8 +34,8 @@ interface NavigationProps {
   pageRef: MutableRefObject<HTMLDivElement | undefined>;
   toggleButtonRef: MutableRefObject<HTMLButtonElement | undefined>;
   globalNavigation: ComponentType<{}>;
-  productNavigation: ComponentType<{}>;
-  containerNavigation?: ComponentType<{}>;
+  moduleNavigation: ComponentType<{}>;
+  contextNavigation?: ComponentType<{}>;
 }
 export const Navigation = ({
   topOffset,
@@ -51,20 +51,26 @@ export const Navigation = ({
   pageRef,
   toggleButtonRef,
   globalNavigation,
-  productNavigation,
-  containerNavigation
+  moduleNavigation,
+  contextNavigation
 }: NavigationProps) => {
   const navigationRef = useRef<HTMLDivElement>();
-  const productRef = useRef<HTMLDivElement>();
+  const moduleNavigationRef = useRef<HTMLDivElement>();
   const flyoutTimeout = useRef<number>();
   const controller = useNavigationControllerContext();
   const { uiState, expand } = controller;
-  const { isCollapsed, isResizing, productNavWidth } = uiState;
+  const { isCollapsed, isResizing, moduleNavWidth } = uiState;
   const [itemIsDragging, setItemIsDragging] = useState(false);
 
+  const GlobalNavigation = globalNavigation;
+
+  const navContainerTopOffset = horizontalGlobalNav
+    ? HORIZONTAL_GLOBAL_NAV_HEIGHT + (topOffset || 0)
+    : topOffset;
+
   const flyoutWidth = fullWidthFlyout
-    ? productNavWidth
-    : CONTENT_NAV_WIDTH_FLYOUT;
+    ? moduleNavWidth
+    : DYNAMIC_NAV_WIDTH_FLYOUT;
 
   const onMouseOut = ({ currentTarget, relatedTarget }: ReactMouseEvent) => {
     if (!isCollapsed || !flyoutOnHover || !flyoutIsOpen) return;
@@ -99,18 +105,18 @@ export const Navigation = ({
     <LayoutEventProvider
       onItemDragStart={() => setItemIsDragging(true)}
       onItemDragEnd={() => setItemIsDragging(false)}>
-      {/* {horizontalGlobalNav && (
-            <HorizontalNavigationContainer topOffset={topOffset}>
-              <GlobalNavigation />
-            </HorizontalNavigationContainer>
-          )} */}
+      {horizontalGlobalNav && (
+        <HorizontalNavigationContainer topOffset={topOffset}>
+          <GlobalNavigation />
+        </HorizontalNavigationContainer>
+      )}
       <NavigationContainer
         ref={ref => (navigationRef.current = ref || undefined)}
-        topOffset={topOffset}
+        topOffset={navContainerTopOffset}
         onMouseOver={alternateFlyoutBehaviour ? onMouseOver : undefined}
         onMouseOut={onMouseOut}
         onMouseLeave={onMouseLeave}>
-        <ContainerMask
+        <NavigationContainerMask
           disableInteraction={itemIsDragging}
           onMouseOver={alternateFlyoutBehaviour ? undefined : onMouseOver}>
           <RenderBlocker blockOnChange itemIsDragging={itemIsDragging}>
@@ -122,8 +128,8 @@ export const Navigation = ({
                   isCollapsed={isCollapsed}
                   flyoutIsOpen={flyoutIsOpen}>
                   <ComposedGlobalNavigation
-                    containerNavigation={containerNavigation}
                     globalNavigation={globalNavigation}
+                    contextNavigation={contextNavigation}
                     topOffset={topOffset}
                     shouldHideGlobalNavShadow={shouldHideGlobalNavShadow}
                     alternateFlyoutBehaviour={alternateFlyoutBehaviour}
@@ -134,23 +140,21 @@ export const Navigation = ({
 
               <ResizeTransition
                 from={[
-                  showContextualNavigation ? CONTENT_NAV_WIDTH_COLLAPSED : 0
+                  showContextualNavigation ? DYNAMIC_NAV_WIDTH_COLLAPSED : 0
                 ]}
                 in={
                   showContextualNavigation
                     ? !isCollapsed || flyoutIsOpen
                     : false
                 }
-                // TODO: ???
-                // productNavWidth={productNavWidth}
                 properties={["width"]}
-                to={[flyoutIsOpen ? flyoutWidth : productNavWidth]}
+                to={[flyoutIsOpen ? flyoutWidth : moduleNavWidth]}
                 userIsDragging={isResizing}>
                 {({ transitionStyle, transitionState }) => (
-                  <ComposedContainerNavigation
-                    productNavigationRef={productRef}
-                    productNavigation={productNavigation}
-                    containerNavigation={containerNavigation}
+                  <ComposedDynamicNavigation
+                    moduleNavigationRef={moduleNavigationRef}
+                    moduleNavigation={moduleNavigation}
+                    contextNavigation={contextNavigation}
                     flyoutOnHover={flyoutOnHover}
                     isResizing={isResizing}
                     isCollapsed={isCollapsed}
@@ -163,7 +167,7 @@ export const Navigation = ({
               </ResizeTransition>
             </Fragment>
           </RenderBlocker>
-        </ContainerMask>
+        </NavigationContainerMask>
         {showContextualNavigation && (
           <ResizeControl
             controller={controller}
@@ -176,7 +180,7 @@ export const Navigation = ({
             }
             mutationRefs={[
               { ref: pageRef, property: "padding-left" },
-              { ref: productRef, property: "width" }
+              { ref: moduleNavigationRef, property: "width" }
             ]}
           />
         )}
@@ -185,21 +189,45 @@ export const Navigation = ({
   );
 };
 
-interface StyledProps {
+interface NavigationContainerProps {
   topOffset?: number;
 }
 
-const NavigationContainer = styled.div<StyledProps>`
+const NavigationContainer = styled.div<NavigationContainerProps>`
   --top-offset: ${props => (props.topOffset ? props.topOffset : 0)}px
 
+  position: fixed;
   top: var(--top-offset);
   bottom: 0px;
   left: 0px;
-  position: fixed;
   z-index: ${NAVIGATION_LAYER_ZINDEX};
   background-color: red;
 
   &:hover .navigation-resize-button {
     opacity: 1;
   }
+`;
+
+const HorizontalNavigationContainer = styled.div<NavigationContainerProps>`
+  --top-offset: ${props => (props.topOffset ? props.topOffset : 0)}px
+
+  position: fixed;
+  top: var(--top-offset);
+  width: 100%;
+  z-index: calc(${NAVIGATION_LAYER_ZINDEX} + 1);
+`;
+
+interface NavigationContainerMaskProps {
+  disableInteraction?: boolean;
+}
+
+const NavigationContainerMask = styled.div<NavigationContainerMaskProps>`
+  --interaction: ${p => (p.disableInteraction ? "none" : "auto")};
+
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  height: 100%;
+  pointer-events: var(--interaction);
+  user-select: var(--interaction);
 `;

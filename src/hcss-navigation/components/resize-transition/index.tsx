@@ -3,12 +3,12 @@ import Transition from "react-transition-group/Transition";
 import { TransitionStatus } from "react-transition-group/Transition";
 import { RESIZE_TRANSITION_DURATION } from "../../common/constants";
 import { getTransition, getStyle, getChanges } from "./helpers";
+import { useIsMounted } from "hcss-navigation/common/is-mounted";
 
 import {
   CollapseListener,
   ExpandListener
 } from "../../models/collapse-listener";
-import { useIsMounted } from "hcss-navigation/common/is-mounted";
 
 interface TransitionProps {
   transitionStyle: Object;

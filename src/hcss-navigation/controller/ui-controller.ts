@@ -4,8 +4,8 @@ import { UIState } from "../models/ui-state";
 import { Resize } from "../models/resize";
 
 import {
-  CONTENT_NAV_WIDTH,
-  PRODUCT_NAV_WIDTH_CACHE_KEY,
+  DYNAMIC_NAV_WIDTH,
+  MODULE_NAV_WIDTH_CACHE_KEY,
   NAV_COLLAPSED_CACHE_KEY,
   NAV_COLLAPSED_STORE_CACHE_KEY
 } from "../common/constants";
@@ -14,7 +14,7 @@ export interface UIController {
   uiState: {
     isResizing: boolean;
     isResizeDisabled: boolean;
-    productNavWidth: number;
+    moduleNavWidth: number;
     isCollapsed: boolean;
   };
   collapse: () => void;
@@ -33,9 +33,9 @@ export const useUIController = (initialState: UIState): UIController => {
     initialState.isResizeDisabled || false
   );
 
-  const [productNavWidth, setProductNavWidth] = useLocalStorage(
-    PRODUCT_NAV_WIDTH_CACHE_KEY,
-    initialState.productNavWidth || CONTENT_NAV_WIDTH
+  const [moduleNavWidth, setmoduleNavWidth] = useLocalStorage(
+    MODULE_NAV_WIDTH_CACHE_KEY,
+    initialState.moduleNavWidth || DYNAMIC_NAV_WIDTH
   );
 
   const [isCollapsed, setIsCollapsed] = useLocalStorage(
@@ -63,17 +63,17 @@ export const useUIController = (initialState: UIState): UIController => {
     toggle();
   };
 
-  const manualResizeStart = ({ productNavWidth, isCollapsed }: Resize) => {
+  const manualResizeStart = ({ moduleNavWidth, isCollapsed }: Resize) => {
     if (isResizeDisabled) return;
     setIsResizing(true);
-    setProductNavWidth(productNavWidth);
+    setmoduleNavWidth(moduleNavWidth);
     setIsCollapsed(isCollapsed);
   };
 
-  const manualResizeEnd = ({ productNavWidth, isCollapsed }: Resize) => {
+  const manualResizeEnd = ({ moduleNavWidth, isCollapsed }: Resize) => {
     if (isResizeDisabled) return;
     setIsResizing(false);
-    setProductNavWidth(productNavWidth);
+    setmoduleNavWidth(moduleNavWidth);
     setIsCollapsed(isCollapsed);
   };
 
@@ -89,7 +89,7 @@ export const useUIController = (initialState: UIState): UIController => {
   };
 
   return {
-    uiState: { isResizing, isResizeDisabled, productNavWidth, isCollapsed },
+    uiState: { isResizing, isResizeDisabled, moduleNavWidth, isCollapsed },
     collapse,
     expand,
     toggleCollapse,

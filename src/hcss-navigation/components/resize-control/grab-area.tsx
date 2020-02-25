@@ -6,11 +6,6 @@ import {
   RESIZE_CONTROL_HANDLE_WIDTH
 } from "hcss-navigation/common/constants";
 
-interface InnerGrabAreaProps {
-  isBold: boolean;
-  showHandle: boolean;
-}
-
 interface GrabAreaProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const GrabArea = ({
@@ -32,6 +27,11 @@ const OuterGrabArea = styled.div`
   height: 100%;
   width: ${RESIZE_CONTROL_OUTER_WIDTH}px;
 `;
+
+interface InnerGrabAreaProps {
+  isBold: boolean;
+  showHandle: boolean;
+}
 
 const InnerGrabArea = styled.div<InnerGrabAreaProps>`
   position: absolute;

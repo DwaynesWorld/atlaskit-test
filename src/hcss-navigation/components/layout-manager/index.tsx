@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactNode, ComponentType } from "react";
-import { Navigation } from "./main-navigation";
+import { Navigation } from "./navigation";
 import { CollapseListeners } from "../../models/collapse-listener";
 import { PageContent } from "./page-content";
 import { useNavigationControllerContext } from "hcss-navigation/context/navigation-controller-context";
 
-interface LayoutManagerProps {
+export interface LayoutManagerProps extends CollapseListeners {
   topOffset?: number;
   flyoutOnHover: boolean;
   fullWidthFlyout: boolean;
@@ -16,8 +16,8 @@ interface LayoutManagerProps {
   horizontalGlobalNav: boolean;
   alternateFlyoutBehaviour: boolean;
   globalNavigation: ComponentType<{}>;
-  productNavigation: ComponentType<{}>;
-  containerNavigation?: ComponentType<{}>;
+  moduleNavigation: ComponentType<{}>;
+  contextNavigation?: ComponentType<{}>;
   children: ReactNode;
 }
 export const LayoutManager = ({
@@ -30,14 +30,14 @@ export const LayoutManager = ({
   horizontalGlobalNav,
   alternateFlyoutBehaviour,
   globalNavigation,
-  productNavigation,
-  containerNavigation,
+  moduleNavigation,
+  contextNavigation,
   onExpandStart,
   onExpandEnd,
   onCollapseEnd,
   onCollapseStart,
   children
-}: LayoutManagerProps & CollapseListeners) => {
+}: LayoutManagerProps) => {
   const pageRef = useRef<HTMLDivElement>();
   const toggleButtonRef = useRef<HTMLButtonElement>();
   const controller = useNavigationControllerContext();
@@ -65,8 +65,8 @@ export const LayoutManager = ({
         horizontalGlobalNav={horizontalGlobalNav}
         alternateFlyoutBehaviour={alternateFlyoutBehaviour}
         globalNavigation={globalNavigation}
-        productNavigation={productNavigation}
-        containerNavigation={containerNavigation}
+        moduleNavigation={moduleNavigation}
+        contextNavigation={contextNavigation}
         toggleButtonRef={toggleButtonRef}
         pageRef={pageRef}
       />
@@ -85,11 +85,11 @@ export const LayoutManager = ({
   );
 };
 
-interface Props {
+interface LayoutContainerProps {
   topOffset?: number;
 }
 
-const LayoutContainer = styled.div<Props>`
+const LayoutContainer = styled.div<LayoutContainerProps>`
   display: flex;
   flex-direction: row;
   --top-offset: ${props => (props.topOffset ? props.topOffset : 0)}px

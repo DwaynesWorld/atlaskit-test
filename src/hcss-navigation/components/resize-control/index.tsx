@@ -8,9 +8,9 @@ import { UIController } from "hcss-navigation/controller/ui-controller";
 
 import {
   RESIZE_CONTROL_OUTER_WIDTH,
-  CONTENT_NAV_WIDTH_COLLAPSED,
+  DYNAMIC_NAV_WIDTH_COLLAPSED,
   GLOBAL_NAV_WIDTH,
-  CONTENT_NAV_WIDTH,
+  DYNAMIC_NAV_WIDTH,
   GLOBAL_NAV_COLLAPSE_THRESHOLD
 } from "hcss-navigation/common/constants";
 
@@ -54,7 +54,7 @@ export class ResizeControl extends React.Component<
     super(props);
 
     const { controller } = props;
-    const { productNavWidth } = controller.uiState;
+    const { moduleNavWidth } = controller.uiState;
 
     this.state = {
       didDragOpen: false,
@@ -65,7 +65,7 @@ export class ResizeControl extends React.Component<
       delta: 0,
       initialWidth: 0,
       initialX: 0,
-      width: productNavWidth
+      width: moduleNavWidth
     };
   }
 
@@ -107,7 +107,7 @@ export class ResizeControl extends React.Component<
 
   initializeDrag = (e: MouseEvent) => {
     const { controller } = this.props;
-    const { isCollapsed, productNavWidth } = controller.uiState;
+    const { isCollapsed, moduleNavWidth } = controller.uiState;
     const { initialX } = this.state;
     const delta = e.pageX - initialX;
 
@@ -116,23 +116,23 @@ export class ResizeControl extends React.Component<
       return;
     }
 
-    let initialWidth = productNavWidth;
+    let initialWidth = moduleNavWidth;
     let didDragOpen = false;
 
     // If the product nav is collapsed and the user starts
     // dragging it open, we must expand it and drag should
     // start from 0.
     if (isCollapsed) {
-      initialWidth = CONTENT_NAV_WIDTH_COLLAPSED;
+      initialWidth = DYNAMIC_NAV_WIDTH_COLLAPSED;
       didDragOpen = true;
 
       controller.manualResizeStart({
-        productNavWidth: CONTENT_NAV_WIDTH_COLLAPSED,
+        moduleNavWidth: DYNAMIC_NAV_WIDTH_COLLAPSED,
         isCollapsed: false
       });
     } else {
       controller.manualResizeStart({
-        productNavWidth,
+        moduleNavWidth,
         isCollapsed
       });
     }
@@ -164,7 +164,7 @@ export class ResizeControl extends React.Component<
     const r = calculatePositionChange(e.pageX, initialX, initialWidth);
     updateResizeAreaPosition(mutationRefs, width);
     if (e.clientX < 0) {
-      this.setState({ width: CONTENT_NAV_WIDTH_COLLAPSED });
+      this.setState({ width: DYNAMIC_NAV_WIDTH_COLLAPSED });
       this.handleResizeEnd();
     } else {
       this.setState({
@@ -187,12 +187,12 @@ export class ResizeControl extends React.Component<
     let shouldCollapse = false;
 
     if (resizerClicked) {
-      publishWidth = Math.max(CONTENT_NAV_WIDTH, currentWidth);
+      publishWidth = Math.max(DYNAMIC_NAV_WIDTH, currentWidth);
       this.toggleCollapse();
     }
 
-    if (publishWidth < CONTENT_NAV_WIDTH) {
-      publishWidth = CONTENT_NAV_WIDTH;
+    if (publishWidth < DYNAMIC_NAV_WIDTH) {
+      publishWidth = DYNAMIC_NAV_WIDTH;
 
       if (didDragOpen && delta > expandThreshold) {
         shouldCollapse = false;
@@ -212,15 +212,15 @@ export class ResizeControl extends React.Component<
     });
 
     controller.manualResizeEnd({
-      productNavWidth: publishWidth,
+      moduleNavWidth: publishWidth,
       isCollapsed: shouldCollapse
     });
 
     if (
       currentWidth >= GLOBAL_NAV_COLLAPSE_THRESHOLD &&
-      currentWidth < CONTENT_NAV_WIDTH
+      currentWidth < DYNAMIC_NAV_WIDTH
     ) {
-      updateResizeAreaPosition(mutationRefs, CONTENT_NAV_WIDTH);
+      updateResizeAreaPosition(mutationRefs, DYNAMIC_NAV_WIDTH);
     }
 
     window.removeEventListener("mousemove", this.handleResize);
@@ -326,7 +326,7 @@ const calculatePositionChange = (
   initialWidth: number
 ) => {
   const maxWidth = Math.round((window.innerWidth / 4) * 3);
-  const minWidth = CONTENT_NAV_WIDTH_COLLAPSED;
+  const minWidth = DYNAMIC_NAV_WIDTH_COLLAPSED;
   const adjustedMax = maxWidth - initialWidth - GLOBAL_NAV_WIDTH;
   const adjustedMin = minWidth - initialWidth;
   const delta = Math.max(Math.min(pageX - initialX, adjustedMax), adjustedMin);

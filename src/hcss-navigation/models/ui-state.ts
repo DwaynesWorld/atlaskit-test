@@ -1,5 +1,5 @@
 export interface UIState {
   isCollapsed?: boolean;
-  productNavWidth?: number;
+  moduleNavWidth?: number;
   isResizeDisabled?: boolean;
 }

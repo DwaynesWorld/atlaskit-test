@@ -1,14 +1,14 @@
 import constate from "constate";
 import { useUIController } from "../controller/ui-controller";
 import { UIState } from "../models/ui-state";
-import { CONTENT_NAV_WIDTH } from "../common/constants";
+import { DYNAMIC_NAV_WIDTH } from "../common/constants";
 
 const DEFAULT_UI_STATE: UIState = {
   isCollapsed: false,
-  productNavWidth: CONTENT_NAV_WIDTH,
+  moduleNavWidth: DYNAMIC_NAV_WIDTH,
   isResizeDisabled: false
 };
-// TODO: Allow uses to specify default nav state
+// TODO: Allow users to specify default nav state
 const useNavigationController = () => {
   const controller = useUIController(DEFAULT_UI_STATE);
 

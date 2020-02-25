@@ -2,71 +2,74 @@ import React from "react";
 import deepEqual from "react-fast-compare";
 import { Transition } from "react-transition-group";
 import { ComponentType, useState, Fragment, useEffect, ReactNode } from "react";
-import { ProductNavigation } from "./product-navigation";
-import { ContainerNavigation } from "./container-navigation";
+import { ModuleNavigationWrapper } from "./module-navigation-wrapper";
+import { ContextNavigationWrapper } from "./context-navigation-wrapper";
 import { transitionDurationMs } from "hcss-navigation/common/constants";
 import { useIsMounted } from "hcss-navigation/common/is-mounted";
 
-interface Props {
-  container?: ComponentType<{}>;
+interface DynamicNavigationProps {
   isVisible: boolean;
-  product: ComponentType<{}>;
   hideNavVisuallyOnCollapse: boolean;
+  contextNavigation?: ComponentType<{}>;
+  moduleNavigation: ComponentType<{}>;
 }
-export const ContentNavigation = React.memo(
+export const DynamicNavigation = React.memo(
   ({
     isVisible,
-    container,
-    product: Product,
+    contextNavigation,
+    moduleNavigation,
     hideNavVisuallyOnCollapse
-  }: Props) => {
+  }: DynamicNavigationProps) => {
+    // TODO: Do we need this?
+    // prettier-ignore
+    const [cachedContextNavigation, setCachedContextNavigation] = useState<ComponentType<any>>();
     const isMounted = useIsMounted();
-    const [cachedContainer, setCachedContainer] = useState<
-      ComponentType<any>
-    >();
-    const shouldRenderContainer = container ? true : false;
-    const Container = cachedContainer || Fragment;
 
     useEffect(() => {
-      if (container && container !== cachedContainer) {
-        setCachedContainer(container);
+      if (contextNavigation && contextNavigation !== cachedContextNavigation) {
+        setCachedContextNavigation(contextNavigation);
       }
-    }, [container, cachedContainer]);
+    }, [contextNavigation, cachedContextNavigation]);
+
+    const shouldRenderContext = contextNavigation ? true : false;
+    const ContextNavigation = cachedContextNavigation || Fragment;
+    const ModuleNavigation = moduleNavigation;
 
     return (
       <Fragment>
-        <ProductNavigation isVisible={isVisible}>
+        <ModuleNavigationWrapper isVisible={isVisible}>
           <ToggleContent
             isVisible={isVisible}
             hideNavVisuallyOnCollapse={hideNavVisuallyOnCollapse}>
-            <Product />
+            <ModuleNavigation />
           </ToggleContent>
-        </ProductNavigation>
+        </ModuleNavigationWrapper>
         <Transition
-          in={shouldRenderContainer}
+          in={shouldRenderContext}
           timeout={isMounted ? transitionDurationMs : 0}
           mountOnEnter={true}
           unmountOnExit={true}>
           {state => (
-            <ContainerNavigation
+            <ContextNavigationWrapper
               isEntering={state === "entering"}
               isExiting={state === "exiting"}
               isVisible={isVisible}>
               <ToggleContent
                 isVisible={isVisible}
                 hideNavVisuallyOnCollapse={hideNavVisuallyOnCollapse}>
-                <Container />
+                <ContextNavigation />
               </ToggleContent>
-            </ContainerNavigation>
+            </ContextNavigationWrapper>
           )}
         </Transition>
       </Fragment>
     );
   },
-  (prev: Props, next: Props) => !deepEqual(prev, next)
+  (prev: DynamicNavigationProps, next: DynamicNavigationProps) =>
+    !deepEqual(prev, next)
 );
 
-interface ToggleProps {
+interface ToggleContentProps {
   isVisible: boolean;
   hideNavVisuallyOnCollapse: boolean;
   children: ReactNode;
@@ -75,7 +78,7 @@ const ToggleContent = ({
   isVisible,
   hideNavVisuallyOnCollapse,
   children
-}: ToggleProps) => {
+}: ToggleContentProps) => {
   if (!hideNavVisuallyOnCollapse && !isVisible) return null;
   return <Fragment>{children}</Fragment>;
 };
