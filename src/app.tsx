@@ -1,11 +1,16 @@
 import React, { Suspense } from "react";
 import styled from "styled-components";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 import { LoadingFallback } from "./components/loading-fallback";
 import { HcssNavigation } from "hcss-navigation/components/";
-import About from "./pages/about";
+import { About } from "./pages/about";
+import { Dashboard } from "./pages/dashboard";
+import { Projects } from "./pages/projects";
 import { HorizontalGlobalNavigation } from "hcss-navigation/components/global-navigation";
 import { HorizontalNavigationButton } from "hcss-navigation/components/global-navigation/horizontal-global-navigation/horizontal-navigation-button";
+import { ProfileMenu } from "./hcss-navigation/components/menu-items/profile-menu";
+import { HelpMenu } from "./hcss-navigation/components/menu-items/help-menu";
+import { SettingsMenu } from "./hcss-navigation/components/menu-items/settings-menu";
 
 export const App = () => {
   return (
@@ -25,7 +30,9 @@ export const App = () => {
           contextNavigation={() => null}>
           <ContentWrapper>
             <Switch>
-              <Route exact path="/" component={About} />
+              <Route exact path="/projects" component={Projects} />
+              <Route exact path="/about" component={About} />
+              <Route exact path="/" component={Dashboard} />
             </Switch>
           </ContentWrapper>
         </HcssNavigation>
@@ -35,28 +42,42 @@ export const App = () => {
 };
 
 const GlobalNavigation = () => {
+  const location = useLocation();
+  const history = useHistory();
+
+  console.log(location);
   return (
     <HorizontalGlobalNavigation
       primaryItems={[
         <HorizontalNavigationButton
-          onClick={(...args: any[]) => {
-            console.log("Dashboard click", ...args);
-          }}>
+          key="dashboard"
+          isHighlighted={location.pathname === "/"}
+          onClick={() => history.push("/")}>
           Dashboard
         </HorizontalNavigationButton>,
         <HorizontalNavigationButton
-          onClick={(...args: any[]) => {
-            console.log("Projects click", ...args);
-          }}>
+          key="projects"
+          isHighlighted={location.pathname === "/projects"}
+          onClick={() => history.push("/projects")}>
           Projects
         </HorizontalNavigationButton>,
         <HorizontalNavigationButton
-          isHighlighted
-          onClick={(...args: any[]) => {
-            console.log("Estimates click", ...args);
-          }}>
-          Estimates
+          key="about"
+          isHighlighted={location.pathname === "/about"}
+          onClick={() => history.push("/about")}>
+          About
         </HorizontalNavigationButton>
+      ]}
+      secondaryItems={[
+        <HelpMenu key="help" />,
+        <SettingsMenu key="settings" />,
+        <ProfileMenu
+          key="profile"
+          firstName="kyle"
+          lastName="thompson"
+          subtext="nothing">
+          something
+        </ProfileMenu>
       ]}
     />
   );

@@ -3,7 +3,9 @@ import styled from "styled-components";
 import WidthDetector from "hcss-navigation/components/width-detector";
 import { useOverflowController } from "../../../controllers/overflow-controller";
 import { OverFlowStatusProvider } from "../../../contexts/overflow-status-context";
-import { DropdownButton } from "react-bootstrap";
+import { Dropdown } from "hcss-navigation/components/menu-items/dropdown";
+import { DropdownButton } from "hcss-navigation/components/menu-items/dropdown/dropdown-button";
+import { DropdownMenu } from "hcss-navigation/components/menu-items/dropdown/dropdown-menu";
 
 interface PrimaryItemsContainerProps {
   moreLabel?: string;
@@ -11,7 +13,7 @@ interface PrimaryItemsContainerProps {
   create?: ComponentType<any>;
 }
 export const PrimaryItemsContainer = ({
-  moreLabel,
+  moreLabel = "•••",
   items,
   create: Create
 }: PrimaryItemsContainerProps) => {
@@ -27,6 +29,7 @@ export const PrimaryItemsContainer = ({
     [overflowItems]
   );
 
+  console.log(overflowContent);
   return (
     <Wrapper>
       <OverFlowStatusProvider isVisible={true}>
@@ -34,12 +37,14 @@ export const PrimaryItemsContainer = ({
       </OverFlowStatusProvider>
 
       {overflowItems.length > 0 && (
-        <DropdownButton
-          title={moreLabel || "..."}
-          id="overflowItems-dropdown"
-          style={{ fontSize: "14px" }}>
-          {overflowContent}
-        </DropdownButton>
+        <Dropdown>
+          <DropdownButton>{moreLabel}</DropdownButton>
+          <DropdownMenu>
+            <OverFlowStatusProvider isVisible={false}>
+              {overflowItems}
+            </OverFlowStatusProvider>
+          </DropdownMenu>
+        </Dropdown>
       )}
 
       {Create && <Create />}

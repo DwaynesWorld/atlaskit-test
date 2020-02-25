@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { useOverflowStatusContext } from "hcss-navigation/contexts/overflow-status-context";
-import { MenuItem } from "react-bootstrap";
+import { DropdownMenuItem } from "hcss-navigation/components/menu-items/dropdown/dropdown-menu-item";
 
 interface HorizontalNavigationButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -15,7 +15,9 @@ export const HorizontalNavigationButton = (
   return isVisible ? (
     <PrimaryButton {...props} />
   ) : (
-    <MenuItem onClick={props.onClick}>{props.children}</MenuItem>
+    <DropdownMenuItem onClick={props.onClick} iconClassName="fa fa-file-text-o">
+      {props.children}
+    </DropdownMenuItem>
   );
 };
 
@@ -25,7 +27,7 @@ const PrimaryButton = ({
 }: HorizontalNavigationButtonProps) => {
   return (
     <PrimaryButtonWrapper isHighlighted={isHighlighted}>
-      <Button {...props} />
+      <Button isHighlighted={isHighlighted} {...props} />
     </PrimaryButtonWrapper>
   );
 };
@@ -38,38 +40,39 @@ const PrimaryButtonWrapper = styled.div<{ isHighlighted: boolean }>`
   height: 100%;
   position: relative;
 
-  ${p =>
+  /* ${p =>
     p.isHighlighted &&
     css`
       &::after {
         position: absolute;
         bottom: 0px;
-        left: 4px;
-        right: 4px;
+        left: 0px;
+        right: 0px;
         content: "";
         height: 3px;
-        background-color: rgb(0, 82, 204);
+
+        background-color: #0370f5;
         border-top-left-radius: 1px;
         border-top-right-radius: 1px;
       }
-    `}
+    `} */
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ isHighlighted: boolean }>`
   align-items: baseline;
   box-sizing: border-box;
   display: inline-flex;
-  font-size: inherit;
+  font-size: 13px;
   font-style: normal;
   font-weight: 500;
   max-width: 100%;
   text-align: center;
   white-space: nowrap;
   box-shadow: transparent 0px 0px 0px 2px;
-  color: rgb(52, 69, 99);
-  height: 2.28571em;
+  color: #1e1e1e;
   line-height: 2.28571em;
   vertical-align: middle;
+  height: 100%;
   width: auto;
   border-width: 0px;
   text-decoration: none;
@@ -80,9 +83,15 @@ const Button = styled.button`
     box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
   outline: none !important;
 
+  ${p =>
+    p.isHighlighted &&
+    css`
+      color: #0370f5;
+    `}
+
   &:hover {
-    color: rgb(0, 82, 204);
-    background-color: rgba(222, 235, 255, 0.9);
+    color: #0370f5;
+    background: #ecf5fe;
     box-shadow: transparent 0px 0px 0px 2px;
   }
 `;

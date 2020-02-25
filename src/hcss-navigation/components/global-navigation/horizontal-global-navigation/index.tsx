@@ -7,25 +7,17 @@ interface HorizontalGlobalNavigationProps {
   appSwitcherComponent?: ComponentType<any>;
   productHomeComponent?: ComponentType<any>;
   primaryItems: ReactNode[];
+  secondaryItems: ReactNode[];
   moreLabel?: string;
   createButtonComponent?: ComponentType<any>;
-  searchComponent?: ComponentType<any>;
-  notificationsComponent?: ComponentType<any>;
-  helpComponent?: ComponentType<any>;
-  settingsComponent?: ComponentType<any>;
-  profileComponent?: ComponentType<any>;
 }
 export const HorizontalGlobalNavigation = ({
   appSwitcherComponent: AppSwitcher,
   productHomeComponent: ProductHome,
   primaryItems,
+  secondaryItems,
   moreLabel,
-  createButtonComponent: Create,
-  searchComponent: Search,
-  notificationsComponent: Notifications,
-  helpComponent: Help,
-  settingsComponent: Settings,
-  profileComponent: Profile
+  createButtonComponent: Create
 }: HorizontalGlobalNavigationProps) => {
   return (
     <Container>
@@ -40,13 +32,7 @@ export const HorizontalGlobalNavigation = ({
         />
       </PrimaryContainerWrapper>
 
-      <SecondaryContainerWrapper>
-        {Search && <Search />}
-        {Notifications && <Notifications />}
-        {Help && <Help />}
-        {Settings && <Settings />}
-        {Profile && <Profile />}
-      </SecondaryContainerWrapper>
+      <SecondaryContainerWrapper>{secondaryItems}</SecondaryContainerWrapper>
     </Container>
   );
 };
@@ -57,8 +43,8 @@ const Container = styled.div`
   display: flex;
   flex-shrink: 0;
   justify-content: space-between;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 0px;
+  padding-right: 0px;
   height: ${HORIZONTAL_GLOBAL_NAV_HEIGHT}px;
   position: relative;
   font-size: 14px;
@@ -94,12 +80,18 @@ const PrimaryContainerWrapper = styled.div`
 `;
 
 const SecondaryContainerWrapper = styled.div`
-  align-items: center;
+  /* align-items: center;
   display: flex;
-  flex-shrink: 0px;
+  flex-shrink: 0px; */
+
+  display: flex;
+  /* flex-grow: 1; */
+  flex-shrink: 0;
+  align-items: center;
+  height: inherit;
 
   & > * {
-    flex-shrink: 0px;
-    margin-right: 4px;
+    flex-shrink: 0;
+    margin-right: 0px;
   }
 `;
