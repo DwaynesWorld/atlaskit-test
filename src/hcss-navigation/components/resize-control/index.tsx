@@ -4,7 +4,7 @@ import { Fragment, MutableRefObject } from "react";
 import { Shadow } from "hcss-navigation/common/shadow";
 import { ToggleButton } from "./toggle-button";
 import { GrabArea } from "./grab-area";
-import { UIController } from "hcss-navigation/controller/ui-controller";
+import { UIController } from "hcss-navigation/controllers/ui-controller";
 
 import {
   RESIZE_CONTROL_OUTER_WIDTH,

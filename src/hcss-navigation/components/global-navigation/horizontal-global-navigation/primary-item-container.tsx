@@ -1,10 +1,12 @@
-import React, { ReactNode, useState, useCallback, ComponentType } from "react";
+import React, { ReactNode, useCallback, ComponentType } from "react";
 import styled from "styled-components";
-import { useOverflowController } from "../../../controller/overflow-controller";
-import { OverFlowStatusProvider } from "../../../context/overflow-status-context";
+import WidthDetector from "hcss-navigation/components/width-detector";
+import { useOverflowController } from "../../../controllers/overflow-controller";
+import { OverFlowStatusProvider } from "../../../contexts/overflow-status-context";
+import { DropdownButton } from "react-bootstrap";
 
 interface PrimaryItemsContainerProps {
-  moreLabel: string;
+  moreLabel?: string;
   items: ReactNode;
   create?: ComponentType<any>;
 }
@@ -15,9 +17,8 @@ export const PrimaryItemsContainer = ({
 }: PrimaryItemsContainerProps) => {
   // prettier-ignore
   const { updateWidth, visibleItems, overflowItems } = useOverflowController(items);
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
 
-  const hiddenContent = useCallback(
+  const overflowContent = useCallback(
     () => (
       <OverFlowStatusProvider isVisible={false}>
         {overflowItems}
@@ -33,24 +34,25 @@ export const PrimaryItemsContainer = ({
       </OverFlowStatusProvider>
 
       {overflowItems.length > 0 && (
-        <div></div>
-        // <Popup
-        //   placement="bottom-start"
-        //   content={content}
-        //   isOpen={isMoreOpen}
-        //   onClose={onMoreClose}
-        //   trigger={trigger}
-        // />
+        <DropdownButton
+          title={moreLabel || "..."}
+          id="overflowItems-dropdown"
+          style={{ fontSize: "14px" }}>
+          {overflowContent}
+        </DropdownButton>
       )}
 
       {Create && <Create />}
 
-      {/* <WidthDetector
-        containerStyle={widthDetectorContainerStyle}
+      <WidthDetector
         onResize={updateWidth}
-      >
+        containerStyle={{
+          flexShrink: 1,
+          minWidth: 1,
+          margin: 0
+        }}>
         {() => null}
-      </WidthDetector> */}
+      </WidthDetector>
     </Wrapper>
   );
 };
@@ -71,7 +73,7 @@ const Wrapper = styled.div`
   }
 
   &::after {
-    content: '""';
+    content: "";
     position: absolute;
     top: 0;
     right: 0;

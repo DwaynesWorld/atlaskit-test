@@ -1,30 +1,72 @@
-import React from "react";
+import React, { ComponentType, ReactNode } from "react";
 import styled from "styled-components";
+import { PrimaryItemsContainer } from "./primary-item-container";
+import { HORIZONTAL_GLOBAL_NAV_HEIGHT } from "hcss-navigation/common/constants";
 
-export const HorizontalGlobalNavigation = () => {
+interface HorizontalGlobalNavigationProps {
+  appSwitcherComponent?: ComponentType<any>;
+  productHomeComponent?: ComponentType<any>;
+  primaryItems: ReactNode[];
+  moreLabel?: string;
+  createButtonComponent?: ComponentType<any>;
+  searchComponent?: ComponentType<any>;
+  notificationsComponent?: ComponentType<any>;
+  helpComponent?: ComponentType<any>;
+  settingsComponent?: ComponentType<any>;
+  profileComponent?: ComponentType<any>;
+}
+export const HorizontalGlobalNavigation = ({
+  appSwitcherComponent: AppSwitcher,
+  productHomeComponent: ProductHome,
+  primaryItems,
+  moreLabel,
+  createButtonComponent: Create,
+  searchComponent: Search,
+  notificationsComponent: Notifications,
+  helpComponent: Help,
+  settingsComponent: Settings,
+  profileComponent: Profile
+}: HorizontalGlobalNavigationProps) => {
   return (
     <Container>
-      <PrimaryContainerWrapper>something</PrimaryContainerWrapper>
+      <PrimaryContainerWrapper>
+        {AppSwitcher && <AppSwitcher />}
+        {ProductHome && <ProductHome />}
+
+        <PrimaryItemsContainer
+          moreLabel={moreLabel}
+          items={primaryItems}
+          create={Create}
+        />
+      </PrimaryContainerWrapper>
+
       <SecondaryContainerWrapper>
-        something else <div>cc</div>
+        {Search && <Search />}
+        {Notifications && <Notifications />}
+        {Help && <Help />}
+        {Settings && <Settings />}
+        {Profile && <Profile />}
       </SecondaryContainerWrapper>
     </Container>
   );
 };
 
 const Container = styled.div`
+  align-items: center;
   box-sizing: border-box;
   display: flex;
-  flex-shrink: 0px;
-  align-items: center;
+  flex-shrink: 0;
   justify-content: space-between;
-  position: relative;
   padding-left: 12px;
   padding-right: 12px;
-  height: 45px;
+  height: ${HORIZONTAL_GLOBAL_NAV_HEIGHT}px;
+  position: relative;
+  font-size: 14px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(107, 119, 140);
 
   &::after {
-    content: '""';
+    content: "";
     position: absolute;
     left: 0;
     right: 0;
@@ -47,7 +89,7 @@ const PrimaryContainerWrapper = styled.div`
   height: inherit;
 
   & > * {
-    flex-shrink: 0px;
+    flex-shrink: 0;
   }
 `;
 

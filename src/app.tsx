@@ -1,20 +1,14 @@
-import React, { Suspense, Fragment } from "react";
+import React, { Suspense } from "react";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
 import { LoadingFallback } from "./components/loading-fallback";
 import { HcssNavigation } from "hcss-navigation/components/";
 import About from "./pages/about";
-
-import {
-  HeaderSection,
-  MenuSection,
-  Item,
-  GlobalNav
-} from "@atlaskit/navigation-next";
+import { HorizontalGlobalNavigation } from "hcss-navigation/components/global-navigation";
+import { HorizontalNavigationButton } from "hcss-navigation/components/global-navigation/horizontal-global-navigation/horizontal-navigation-button";
 
 export const App = () => {
   return (
-    // <SiteLayout>
     <Suspense fallback={<LoadingFallback />}>
       <FullHeightContainer>
         <HcssNavigation
@@ -37,32 +31,36 @@ export const App = () => {
         </HcssNavigation>
       </FullHeightContainer>
     </Suspense>
-    // </SiteLayout>
   );
 };
 
 const GlobalNavigation = () => {
-  return <GlobalNav primaryItems={[]} secondaryItems={[]} />;
+  return (
+    <HorizontalGlobalNavigation
+      primaryItems={[
+        <HorizontalNavigationButton
+          onClick={(...args: any[]) => {
+            console.log("Dashboard click", ...args);
+          }}>
+          Dashboard
+        </HorizontalNavigationButton>,
+        <HorizontalNavigationButton
+          onClick={(...args: any[]) => {
+            console.log("Projects click", ...args);
+          }}>
+          Projects
+        </HorizontalNavigationButton>,
+        <HorizontalNavigationButton
+          isHighlighted
+          onClick={(...args: any[]) => {
+            console.log("Estimates click", ...args);
+          }}>
+          Estimates
+        </HorizontalNavigationButton>
+      ]}
+    />
+  );
 };
-
-const MyProductNavigation = () => (
-  <Fragment>
-    <HeaderSection>
-      {({ className }: any) => <div className={className}>Create </div>}
-    </HeaderSection>
-    <MenuSection>
-      {({ className }: any) => (
-        <div className={className}>
-          <Item text="Dashboard" />
-          <Item text="Projects" />
-          <Item text="Estimates" />
-          <Item text="Quote Management" />
-          <Item text="Contacts" />
-        </div>
-      )}
-    </MenuSection>
-  </Fragment>
-);
 
 const ContentWrapper = styled.div`
   width: 100%;

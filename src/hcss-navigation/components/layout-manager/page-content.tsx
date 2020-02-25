@@ -1,6 +1,6 @@
 import React, { MutableRefObject, ReactNode } from "react";
 import styled from "styled-components";
-import { useNavigationControllerContext } from "../../context/navigation-controller-context";
+import { useNavigationControllerContext } from "../../contexts/navigation-controller-context";
 import { ResizeTransition } from "../resize-transition";
 import { isTransitioning } from "../resize-transition/helpers";
 import { CollapseListeners } from "../../models/collapse-listener";

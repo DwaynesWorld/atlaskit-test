@@ -4,7 +4,7 @@ import { ReactNode, ComponentType } from "react";
 import { Navigation } from "./navigation";
 import { CollapseListeners } from "../../models/collapse-listener";
 import { PageContent } from "./page-content";
-import { useNavigationControllerContext } from "hcss-navigation/context/navigation-controller-context";
+import { useNavigationControllerContext } from "hcss-navigation/contexts/navigation-controller-context";
 
 export interface LayoutManagerProps extends CollapseListeners {
   topOffset?: number;

@@ -1,8 +1,8 @@
 import React, { MutableRefObject } from "react";
 import styled from "styled-components";
 import { useState, useRef, Fragment, ComponentType } from "react";
-import { LayoutEventProvider } from "../../context/layout-event-context";
-import { useNavigationControllerContext } from "../../context/navigation-controller-context";
+import { LayoutEventProvider } from "../../contexts/layout-event-context";
+import { useNavigationControllerContext } from "../../contexts/navigation-controller-context";
 import { RenderBlocker } from "../../common/render-blocker";
 import { ComposedGlobalNavigation } from "./composed-global-navigation";
 import { ComposedDynamicNavigation } from "./composed-dynamic-navigation";

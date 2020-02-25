@@ -1,5 +1,5 @@
 import constate from "constate";
-import { useUIController } from "../controller/ui-controller";
+import { useUIController } from "../controllers/ui-controller";
 import { UIState } from "../models/ui-state";
 import { DYNAMIC_NAV_WIDTH } from "../common/constants";
 

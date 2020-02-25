@@ -1,5 +1,5 @@
 import React from "react";
-import { NavigationControllerProvider } from "hcss-navigation/context/navigation-controller-context";
+import { NavigationControllerProvider } from "hcss-navigation/contexts/navigation-controller-context";
 import {
   LayoutManager,
   LayoutManagerProps
