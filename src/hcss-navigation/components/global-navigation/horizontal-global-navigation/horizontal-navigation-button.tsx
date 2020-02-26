@@ -15,7 +15,7 @@ export const HorizontalNavigationButton = (
   return isVisible ? (
     <PrimaryButton {...props} />
   ) : (
-    <DropdownMenuItem onClick={props.onClick} iconClassName="fa fa-file-text-o">
+    <DropdownMenuItem onClick={props.onClick}>
       {props.children}
     </DropdownMenuItem>
   );

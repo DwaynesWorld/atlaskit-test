@@ -6,6 +6,7 @@ import { OverFlowStatusProvider } from "../../../contexts/overflow-status-contex
 import { Dropdown } from "hcss-navigation/components/menu-items/dropdown";
 import { DropdownButton } from "hcss-navigation/components/menu-items/dropdown/dropdown-button";
 import { DropdownMenu } from "hcss-navigation/components/menu-items/dropdown/dropdown-menu";
+import { DropdownIcon } from "hcss-navigation/components/menu-items/dropdown/dropdown-icon";
 
 interface PrimaryItemsContainerProps {
   moreLabel?: string;
@@ -13,44 +14,51 @@ interface PrimaryItemsContainerProps {
   create?: ComponentType<any>;
 }
 export const PrimaryItemsContainer = ({
-  moreLabel = "•••",
+  moreLabel,
   items,
   create: Create
 }: PrimaryItemsContainerProps) => {
-  // prettier-ignore
-  const { updateWidth, visibleItems, overflowItems } = useOverflowController(items);
+  const controller = useOverflowController(items);
 
-  const overflowContent = useCallback(
-    () => (
-      <OverFlowStatusProvider isVisible={false}>
-        {overflowItems}
-      </OverFlowStatusProvider>
-    ),
-    [overflowItems]
-  );
+  // const overflowContent = useCallback(
+  //   () => (
+  //     <OverFlowStatusProvider isVisible={false}>
+  //       {overflowItems}
+  //     </OverFlowStatusProvider>
+  //   ),
+  //   [overflowItems]
+  // );
 
-  console.log(overflowContent);
   return (
-    <Wrapper>
+    <Wrapper id="uuu">
       <OverFlowStatusProvider isVisible={true}>
-        {visibleItems}
+        {controller.visibleItems}
       </OverFlowStatusProvider>
 
-      {overflowItems.length > 0 && (
+      {controller.overflowItems.length > 0 && (
         <Dropdown>
-          <DropdownButton>{moreLabel}</DropdownButton>
-          <DropdownMenu>
+          <DropdownButton>
+            {moreLabel === undefined ? (
+              "•••"
+            ) : (
+              <>
+                {moreLabel}&nbsp;
+                <DropdownIcon className="fa fa-angle-down" />
+              </>
+            )}
+          </DropdownButton>
+          <OverflowDropdownMenu>
             <OverFlowStatusProvider isVisible={false}>
-              {overflowItems}
+              {controller.overflowItems}
             </OverFlowStatusProvider>
-          </DropdownMenu>
+          </OverflowDropdownMenu>
         </Dropdown>
       )}
 
       {Create && <Create />}
 
       <WidthDetector
-        onResize={updateWidth}
+        onResize={controller.updateWidth}
         containerStyle={{
           flexShrink: 1,
           minWidth: 1,
@@ -69,7 +77,6 @@ const Wrapper = styled.div`
   flex-shrink: 0;
   flex-basis: 0;
   height: 100%;
-  overflow: hidden;
   position: relative;
 
   & > * {
@@ -90,5 +97,13 @@ const Wrapper = styled.div`
       rgba(255, 255, 255, 0.7) 50%,
       rgb(255, 255, 255) 100%
     );
+  }
+`;
+
+const OverflowDropdownMenu = styled(DropdownMenu)`
+  padding: 16px 24px 12px 24px;
+
+  & .dropdown-menu-item > a {
+    padding: 10px 0;
   }
 `;

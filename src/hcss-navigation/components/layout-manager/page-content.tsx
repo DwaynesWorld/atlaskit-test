@@ -35,7 +35,6 @@ export const PageContent = ({
 
   // prettier-ignore
   const expandedSize = flyoutIsOpen ? DYNAMIC_NAV_WIDTH_FLYOUT : moduleNavWidth;
-  console.log(flyoutIsOpen, expandedSize);
   const collapsedSize = 0;
   const leftOffset = horizontalGlobalNav ? 0 : GLOBAL_NAV_WIDTH;
   const topOffset = horizontalGlobalNav ? HORIZONTAL_GLOBAL_NAV_HEIGHT : 0;

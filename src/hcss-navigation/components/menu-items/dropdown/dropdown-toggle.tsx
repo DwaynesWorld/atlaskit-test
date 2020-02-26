@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-export const DropdownToggle = styled("a").attrs({
+export const DropdownToggle = styled("a").attrs((props: any) => ({
   href: "#",
-  togglewidth: (props: any) => props.togglewidth
-})`
+  togglewidth: props.togglewidth
+}))`
   display: block;
   position: relative;
   border: none;

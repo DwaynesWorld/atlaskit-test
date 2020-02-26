@@ -45,9 +45,9 @@ const GlobalNavigation = () => {
   const location = useLocation();
   const history = useHistory();
 
-  console.log(location);
   return (
     <HorizontalGlobalNavigation
+      // moreLabel="More"
       primaryItems={[
         <HorizontalNavigationButton
           key="dashboard"
