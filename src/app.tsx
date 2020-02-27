@@ -1,4 +1,4 @@
-import React, { Suspense, Fragment } from "react";
+import React, { Suspense } from "react";
 import styled from "styled-components";
 import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 import { LoadingFallback } from "./components/loading-fallback";
@@ -11,11 +11,12 @@ import { ProfileMenu } from "./hcss-navigation/components/menu-items/profile-men
 import { HelpMenu } from "./hcss-navigation/components/menu-items/help-menu";
 import { SettingsMenu } from "./hcss-navigation/components/menu-items/settings-menu";
 import { ProductHome } from "hcss-navigation/components/menu-items/product-home";
+import { ConcreteColors } from "hcss-components";
 import {
   GlobalSideNavigation,
   GlobalTopNavigation
 } from "hcss-navigation/components/global-navigation";
-import { ConcreteColors } from "hcss-components";
+
 export const App = () => {
   return (
     <Suspense fallback={<LoadingFallback />}>
@@ -91,7 +92,7 @@ const TopNavigation = () => {
 const SideNavigation = () => {
   return (
     <GlobalSideNavigation
-      topOffset={40}
+      topOffset={0}
       style={{
         backgroundColor: ConcreteColors.gray300
       }}
