@@ -8,9 +8,9 @@ export const ALTERNATE_FLYOUT_DELAY = 200;
 export const DYNAMIC_NAV_WIDTH = 240;
 export const DYNAMIC_NAV_WIDTH_FLYOUT = 232;
 export const DYNAMIC_NAV_WIDTH_COLLAPSED = 20;
-export const GLOBAL_NAV_WIDTH = 64;
+export const GLOBAL_TOP_NAV_HEIGHT = 45;
+export const GLOBAL_SIDE_NAV_WIDTH = 64;
 export const GLOBAL_NAV_COLLAPSE_THRESHOLD = 200;
-export const HORIZONTAL_GLOBAL_NAV_HEIGHT = 45;
 export const NAVIGATION_LAYER_ZINDEX = 200;
 
 const CACHE_KEY = "hcss.navigation.ui.state";

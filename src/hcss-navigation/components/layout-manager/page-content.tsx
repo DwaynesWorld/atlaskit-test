@@ -8,22 +8,24 @@ import { CollapseListeners } from "../../models/collapse-listener";
 import {
   DYNAMIC_NAV_WIDTH_COLLAPSED,
   DYNAMIC_NAV_WIDTH_FLYOUT,
-  GLOBAL_NAV_WIDTH,
-  HORIZONTAL_GLOBAL_NAV_HEIGHT
+  GLOBAL_SIDE_NAV_WIDTH,
+  GLOBAL_TOP_NAV_HEIGHT
 } from "hcss-navigation/common/constants";
 
 interface PageContentProps {
   pageRef: MutableRefObject<HTMLDivElement | undefined>;
   flyoutIsOpen: boolean;
   showContextualNavigation: boolean;
-  horizontalGlobalNav: boolean;
+  useGlobalTopNavigation: boolean;
+  useGlobalSideNavigation: boolean;
   children: ReactNode;
 }
 export const PageContent = ({
   pageRef,
   flyoutIsOpen,
   showContextualNavigation,
-  horizontalGlobalNav,
+  useGlobalTopNavigation,
+  useGlobalSideNavigation,
   onExpandStart,
   onExpandEnd,
   onCollapseEnd,
@@ -36,8 +38,8 @@ export const PageContent = ({
   // prettier-ignore
   const expandedSize = flyoutIsOpen ? DYNAMIC_NAV_WIDTH_FLYOUT : moduleNavWidth;
   const collapsedSize = 0;
-  const leftOffset = horizontalGlobalNav ? 0 : GLOBAL_NAV_WIDTH;
-  const topOffset = horizontalGlobalNav ? HORIZONTAL_GLOBAL_NAV_HEIGHT : 0;
+  const topOffset = useGlobalTopNavigation ? GLOBAL_TOP_NAV_HEIGHT : 0;
+  const leftOffset = useGlobalSideNavigation ? GLOBAL_SIDE_NAV_WIDTH : 0;
 
   return (
     <ResizeTransition
@@ -54,8 +56,8 @@ export const PageContent = ({
         <PageWrapper
           ref={r => (pageRef.current = r || undefined)}
           disableInteraction={isResizing || isTransitioning(transitionState)}
-          leftOffset={leftOffset}
           topOffset={topOffset}
+          leftOffset={leftOffset}
           style={transitionStyle}>
           {children}
         </PageWrapper>

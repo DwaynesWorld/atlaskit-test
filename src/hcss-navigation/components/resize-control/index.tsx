@@ -9,7 +9,7 @@ import { UIController } from "hcss-navigation/controllers/ui-controller";
 import {
   RESIZE_CONTROL_OUTER_WIDTH,
   DYNAMIC_NAV_WIDTH_COLLAPSED,
-  GLOBAL_NAV_WIDTH,
+  GLOBAL_SIDE_NAV_WIDTH,
   DYNAMIC_NAV_WIDTH,
   GLOBAL_NAV_COLLAPSE_THRESHOLD
 } from "hcss-navigation/common/constants";
@@ -327,7 +327,7 @@ const calculatePositionChange = (
 ) => {
   const maxWidth = Math.round((window.innerWidth / 4) * 3);
   const minWidth = DYNAMIC_NAV_WIDTH_COLLAPSED;
-  const adjustedMax = maxWidth - initialWidth - GLOBAL_NAV_WIDTH;
+  const adjustedMax = maxWidth - initialWidth - GLOBAL_SIDE_NAV_WIDTH;
   const adjustedMin = minWidth - initialWidth;
   const delta = Math.max(Math.min(pageX - initialX, adjustedMax), adjustedMin);
   const width = initialWidth + delta;

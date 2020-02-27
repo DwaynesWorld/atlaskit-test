@@ -3,13 +3,11 @@ import styled, { css } from "styled-components";
 import { useOverflowStatusContext } from "hcss-navigation/contexts/overflow-status-context";
 import { DropdownMenuItem } from "hcss-navigation/components/menu-items/dropdown/dropdown-menu-item";
 
-interface HorizontalNavigationButtonProps
+interface TopNavigationButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isHighlighted?: boolean;
 }
-export const HorizontalNavigationButton = (
-  props: HorizontalNavigationButtonProps
-) => {
+export const TopNavigationButton = (props: TopNavigationButtonProps) => {
   const isVisible = useOverflowStatusContext();
 
   return isVisible ? (
@@ -24,7 +22,7 @@ export const HorizontalNavigationButton = (
 const PrimaryButton = ({
   isHighlighted = false,
   ...props
-}: HorizontalNavigationButtonProps) => {
+}: TopNavigationButtonProps) => {
   return (
     <PrimaryButtonWrapper isHighlighted={isHighlighted}>
       <Button isHighlighted={isHighlighted} {...props} />

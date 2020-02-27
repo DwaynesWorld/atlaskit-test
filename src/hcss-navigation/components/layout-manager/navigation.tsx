@@ -4,7 +4,7 @@ import { useState, useRef, Fragment, ComponentType } from "react";
 import { LayoutEventProvider } from "../../contexts/layout-event-context";
 import { useNavigationControllerContext } from "../../contexts/navigation-controller-context";
 import { RenderBlocker } from "../../common/render-blocker";
-import { ComposedGlobalNavigation } from "./composed-global-navigation";
+import { ComposedGlobalSideNavigation } from "./composed-global-side-navigation";
 import { ComposedDynamicNavigation } from "./composed-dynamic-navigation";
 import { ResizeTransition } from "../resize-transition";
 import { ResizeControl } from "../resize-control";
@@ -15,7 +15,7 @@ import {
   NAVIGATION_LAYER_ZINDEX,
   ALTERNATE_FLYOUT_DELAY,
   FLYOUT_DELAY,
-  HORIZONTAL_GLOBAL_NAV_HEIGHT
+  GLOBAL_TOP_NAV_HEIGHT
 } from "hcss-navigation/common/constants";
 
 type ReactMouseEvent = React.MouseEvent<HTMLDivElement, MouseEvent>;
@@ -27,13 +27,13 @@ interface NavigationProps {
   hideNavVisuallyOnCollapse: boolean;
   shouldHideGlobalNavShadow: boolean;
   showContextualNavigation: boolean;
-  horizontalGlobalNav: boolean;
   alternateFlyoutBehaviour: boolean;
   flyoutIsOpen: boolean;
   setFlyoutIsOpen: (open: boolean) => void;
   pageRef: MutableRefObject<HTMLDivElement | undefined>;
   toggleButtonRef: MutableRefObject<HTMLButtonElement | undefined>;
-  globalNavigation: ComponentType<{}>;
+  globalTopNavigation?: ComponentType<{}>;
+  globalSideNavigation?: ComponentType<{}>;
   moduleNavigation: ComponentType<{}>;
   contextNavigation?: ComponentType<{}>;
 }
@@ -46,11 +46,11 @@ export const Navigation = ({
   hideNavVisuallyOnCollapse,
   shouldHideGlobalNavShadow,
   showContextualNavigation,
-  horizontalGlobalNav,
   alternateFlyoutBehaviour,
   pageRef,
   toggleButtonRef,
-  globalNavigation,
+  globalTopNavigation,
+  globalSideNavigation,
   moduleNavigation,
   contextNavigation
 }: NavigationProps) => {
@@ -62,10 +62,10 @@ export const Navigation = ({
   const { isCollapsed, isResizing, moduleNavWidth } = uiState;
   const [itemIsDragging, setItemIsDragging] = useState(false);
 
-  const GlobalNavigation = globalNavigation;
+  const GlobalTopNavigation = globalTopNavigation;
 
-  const navContainerTopOffset = horizontalGlobalNav
-    ? HORIZONTAL_GLOBAL_NAV_HEIGHT + (topOffset || 0)
+  const navContainerTopOffset = GlobalTopNavigation
+    ? GLOBAL_TOP_NAV_HEIGHT + (topOffset || 0)
     : topOffset;
 
   const flyoutWidth = fullWidthFlyout
@@ -105,9 +105,9 @@ export const Navigation = ({
     <LayoutEventProvider
       onItemDragStart={() => setItemIsDragging(true)}
       onItemDragEnd={() => setItemIsDragging(false)}>
-      {horizontalGlobalNav && (
+      {GlobalTopNavigation && (
         <HorizontalNavigationContainer topOffset={topOffset}>
-          <GlobalNavigation />
+          <GlobalTopNavigation />
         </HorizontalNavigationContainer>
       )}
       <NavigationContainer
@@ -121,17 +121,17 @@ export const Navigation = ({
           onMouseOver={alternateFlyoutBehaviour ? undefined : onMouseOver}>
           <RenderBlocker blockOnChange itemIsDragging={itemIsDragging}>
             <Fragment>
-              {!horizontalGlobalNav && (
+              {globalSideNavigation && (
                 <RenderBlocker
                   blockOnChange={true}
                   isResizing={isResizing}
                   isCollapsed={isCollapsed}
                   flyoutIsOpen={flyoutIsOpen}>
-                  <ComposedGlobalNavigation
-                    globalNavigation={globalNavigation}
+                  <ComposedGlobalSideNavigation
+                    globalSideNavigation={globalSideNavigation}
                     contextNavigation={contextNavigation}
                     topOffset={topOffset}
-                    shouldHideGlobalNavShadow={shouldHideGlobalNavShadow}
+                    shouldHideSideGlobalNavShadow={shouldHideGlobalNavShadow}
                     alternateFlyoutBehaviour={alternateFlyoutBehaviour}
                     closeFlyout={closeFlyout}
                   />

@@ -1,9 +1,9 @@
 import React, { ComponentType, ReactNode } from "react";
 import styled from "styled-components";
 import { PrimaryItemsContainer } from "./primary-item-container";
-import { HORIZONTAL_GLOBAL_NAV_HEIGHT } from "hcss-navigation/common/constants";
+import { GLOBAL_TOP_NAV_HEIGHT } from "hcss-navigation/common/constants";
 
-interface HorizontalGlobalNavigationProps {
+interface GlobalTopNavigationProps {
   appSwitcherComponent?: ComponentType<any>;
   productHomeComponent?: ComponentType<any>;
   primaryItems: ReactNode[];
@@ -11,14 +11,14 @@ interface HorizontalGlobalNavigationProps {
   moreLabel?: string;
   createButtonComponent?: ComponentType<any>;
 }
-export const HorizontalGlobalNavigation = ({
+export const GlobalTopNavigation = ({
   appSwitcherComponent: AppSwitcher,
   productHomeComponent: ProductHome,
   primaryItems,
   secondaryItems,
   moreLabel,
   createButtonComponent: Create
-}: HorizontalGlobalNavigationProps) => {
+}: GlobalTopNavigationProps) => {
   return (
     <Container>
       <PrimaryContainerWrapper>
@@ -45,7 +45,7 @@ const Container = styled.div`
   justify-content: space-between;
   padding-left: 0px;
   padding-right: 0px;
-  height: ${HORIZONTAL_GLOBAL_NAV_HEIGHT}px;
+  height: ${GLOBAL_TOP_NAV_HEIGHT}px;
   position: relative;
   font-size: 14px;
   background-color: rgb(255, 255, 255);

@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, Fragment } from "react";
 import styled from "styled-components";
 import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 import { LoadingFallback } from "./components/loading-fallback";
@@ -6,12 +6,16 @@ import { HcssNavigation } from "hcss-navigation/components/";
 import { About } from "./pages/about";
 import { Dashboard } from "./pages/dashboard";
 import { Projects } from "./pages/projects";
-import { HorizontalGlobalNavigation } from "hcss-navigation/components/global-navigation";
-import { HorizontalNavigationButton } from "hcss-navigation/components/global-navigation/horizontal-global-navigation/horizontal-navigation-button";
+import { TopNavigationButton } from "hcss-navigation/components/global-navigation/top-navigation/top-navigation-button";
 import { ProfileMenu } from "./hcss-navigation/components/menu-items/profile-menu";
 import { HelpMenu } from "./hcss-navigation/components/menu-items/help-menu";
 import { SettingsMenu } from "./hcss-navigation/components/menu-items/settings-menu";
-
+import { ProductHome } from "hcss-navigation/components/menu-items/product-home";
+import {
+  GlobalSideNavigation,
+  GlobalTopNavigation
+} from "hcss-navigation/components/global-navigation";
+import { ConcreteColors } from "hcss-components";
 export const App = () => {
   return (
     <Suspense fallback={<LoadingFallback />}>
@@ -23,9 +27,9 @@ export const App = () => {
           hideNavVisuallyOnCollapse={false}
           shouldHideGlobalNavShadow={false}
           showContextualNavigation={true}
-          horizontalGlobalNav={true}
           alternateFlyoutBehaviour={false}
-          globalNavigation={GlobalNavigation}
+          globalTopNavigation={TopNavigation}
+          globalSideNavigation={SideNavigation}
           moduleNavigation={() => null}
           contextNavigation={() => null}>
           <ContentWrapper>
@@ -41,32 +45,33 @@ export const App = () => {
   );
 };
 
-const GlobalNavigation = () => {
+const TopNavigation = () => {
   const location = useLocation();
   const history = useHistory();
 
   return (
-    <HorizontalGlobalNavigation
+    <GlobalTopNavigation
+      productHomeComponent={ProductHomeComponent}
       // moreLabel="More"
       primaryItems={[
-        <HorizontalNavigationButton
+        <TopNavigationButton
           key="dashboard"
           isHighlighted={location.pathname === "/"}
           onClick={() => history.push("/")}>
           Dashboard
-        </HorizontalNavigationButton>,
-        <HorizontalNavigationButton
+        </TopNavigationButton>,
+        <TopNavigationButton
           key="projects"
           isHighlighted={location.pathname === "/projects"}
           onClick={() => history.push("/projects")}>
           Projects
-        </HorizontalNavigationButton>,
-        <HorizontalNavigationButton
+        </TopNavigationButton>,
+        <TopNavigationButton
           key="about"
           isHighlighted={location.pathname === "/about"}
           onClick={() => history.push("/about")}>
           About
-        </HorizontalNavigationButton>
+        </TopNavigationButton>
       ]}
       secondaryItems={[
         <HelpMenu key="help" />,
@@ -79,6 +84,40 @@ const GlobalNavigation = () => {
           something
         </ProfileMenu>
       ]}
+    />
+  );
+};
+
+const SideNavigation = () => {
+  return (
+    <GlobalSideNavigation
+      topOffset={40}
+      style={{
+        backgroundColor: ConcreteColors.gray300
+      }}
+      primaryItems={[]}
+      secondaryItems={[]}
+    />
+  );
+};
+
+const ProductHomeComponent = () => {
+  const history = useHistory();
+
+  return (
+    <ProductHome
+      productName="HeavyBid"
+      icon={
+        <>
+          <img
+            height="20"
+            width="20"
+            src={require("./icon.png")}
+            alt="nothing"
+          />
+        </>
+      }
+      onClick={() => history.push("/")}
     />
   );
 };

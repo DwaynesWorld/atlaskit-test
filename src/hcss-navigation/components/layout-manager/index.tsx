@@ -13,9 +13,9 @@ export interface LayoutManagerProps extends CollapseListeners {
   hideNavVisuallyOnCollapse: boolean;
   shouldHideGlobalNavShadow: boolean;
   showContextualNavigation: boolean;
-  horizontalGlobalNav: boolean;
   alternateFlyoutBehaviour: boolean;
-  globalNavigation: ComponentType<{}>;
+  globalTopNavigation?: ComponentType<{}>;
+  globalSideNavigation?: ComponentType<{}>;
   moduleNavigation: ComponentType<{}>;
   contextNavigation?: ComponentType<{}>;
   children: ReactNode;
@@ -27,9 +27,9 @@ export const LayoutManager = ({
   hideNavVisuallyOnCollapse,
   shouldHideGlobalNavShadow,
   showContextualNavigation,
-  horizontalGlobalNav,
   alternateFlyoutBehaviour,
-  globalNavigation,
+  globalTopNavigation,
+  globalSideNavigation,
   moduleNavigation,
   contextNavigation,
   onExpandStart,
@@ -62,9 +62,9 @@ export const LayoutManager = ({
         hideNavVisuallyOnCollapse={hideNavVisuallyOnCollapse}
         shouldHideGlobalNavShadow={shouldHideGlobalNavShadow}
         showContextualNavigation={showContextualNavigation}
-        horizontalGlobalNav={horizontalGlobalNav}
         alternateFlyoutBehaviour={alternateFlyoutBehaviour}
-        globalNavigation={globalNavigation}
+        globalTopNavigation={globalTopNavigation}
+        globalSideNavigation={globalSideNavigation}
         moduleNavigation={moduleNavigation}
         contextNavigation={contextNavigation}
         toggleButtonRef={toggleButtonRef}
@@ -73,7 +73,8 @@ export const LayoutManager = ({
       <PageContent
         flyoutIsOpen={flyoutIsOpen}
         showContextualNavigation={showContextualNavigation}
-        horizontalGlobalNav={horizontalGlobalNav}
+        useGlobalTopNavigation={globalTopNavigation !== undefined}
+        useGlobalSideNavigation={globalSideNavigation !== undefined}
         onExpandStart={onExpandStart}
         onExpandEnd={onExpandEnd}
         onCollapseEnd={onCollapseEnd}

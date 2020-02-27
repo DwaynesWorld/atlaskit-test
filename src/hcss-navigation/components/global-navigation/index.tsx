@@ -1,2 +1,2 @@
-export { VerticalGlobalNavigation } from "./vertical-global-navigation/";
-export { HorizontalGlobalNavigation } from "./horizontal-global-navigation";
+export { GlobalTopNavigation } from "./top-navigation";
+export { GlobalSideNavigation } from "./side-navigation";
