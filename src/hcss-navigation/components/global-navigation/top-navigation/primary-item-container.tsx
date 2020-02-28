@@ -3,10 +3,10 @@ import styled from "styled-components";
 import WidthDetector from "hcss-navigation/components/width-detector";
 import { useOverflowController } from "../../../controllers/overflow-controller";
 import { OverFlowStatusProvider } from "../../../contexts/overflow-status-context";
-import { Dropdown } from "hcss-navigation/components/menu-items/dropdown";
-import { DropdownButton } from "hcss-navigation/components/menu-items/dropdown/dropdown-button";
-import { DropdownMenu } from "hcss-navigation/components/menu-items/dropdown/dropdown-menu";
-import { DropdownIcon } from "hcss-navigation/components/menu-items/dropdown/dropdown-icon";
+import { Dropdown } from "hcss-navigation/components/global-navigation/top-navigation/items/dropdown";
+import { DropdownButton } from "hcss-navigation/components/global-navigation/top-navigation/items/dropdown/dropdown-button";
+import { DropdownMenu } from "hcss-navigation/components/global-navigation/top-navigation/items/dropdown/dropdown-menu";
+import { DropdownIcon } from "hcss-navigation/components/global-navigation/top-navigation/items/dropdown/dropdown-icon";
 
 interface PrimaryItemsContainerProps {
   moreLabel?: string;
@@ -30,7 +30,7 @@ export const PrimaryItemsContainer = ({
   // );
 
   return (
-    <Wrapper id="uuu">
+    <Wrapper>
       <OverFlowStatusProvider isVisible={true}>
         {controller.visibleItems}
       </OverFlowStatusProvider>

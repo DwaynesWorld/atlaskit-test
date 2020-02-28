@@ -1,4 +1,4 @@
-import React, { ReactNode, ComponentType } from "react";
+import React, { ReactNode } from "react";
 import styled from "styled-components";
 import { GLOBAL_SIDE_NAV_WIDTH } from "hcss-navigation/common/constants";
 
@@ -7,24 +7,19 @@ interface GlobalSideNavigationProps {
   style?: React.CSSProperties;
   primaryItems: ReactNode[];
   secondaryItems: ReactNode[];
-  createButtonComponent?: ComponentType<any>;
+  createButtonComponent?: ReactNode;
 }
 export const GlobalSideNavigation = ({
   topOffset = 0,
   style,
   primaryItems,
   secondaryItems,
-  createButtonComponent: Create
+  createButtonComponent: create
 }: GlobalSideNavigationProps) => {
   return (
     <Container topOffset={topOffset} style={style}>
       <PrimaryContainerWrapper>
-        {Create && (
-          <CreateContainerWrapper>
-            <Create />
-          </CreateContainerWrapper>
-        )}
-
+        {create && <CreateContainerWrapper>{create}</CreateContainerWrapper>}
         {primaryItems}
       </PrimaryContainerWrapper>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { useOverflowStatusContext } from "hcss-navigation/contexts/overflow-status-context";
-import { DropdownMenuItem } from "hcss-navigation/components/menu-items/dropdown/dropdown-menu-item";
+import { DropdownMenuItem } from "hcss-navigation/components/global-navigation/top-navigation/items/dropdown/dropdown-menu-item";
 
 interface TopNavigationButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -37,23 +37,6 @@ const PrimaryButtonWrapper = styled.div<{ isHighlighted: boolean }>`
   align-items: center;
   height: 100%;
   position: relative;
-
-  /* ${p =>
-    p.isHighlighted &&
-    css`
-      &::after {
-        position: absolute;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-        content: "";
-        height: 3px;
-
-        background-color: #0370f5;
-        border-top-left-radius: 1px;
-        border-top-right-radius: 1px;
-      }
-    `} */
 `;
 
 const Button = styled.button<{ isHighlighted: boolean }>`

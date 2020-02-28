@@ -96,5 +96,4 @@ const LayoutContainer = styled.div<LayoutContainerProps>`
   --top-offset: ${props => (props.topOffset ? props.topOffset : 0)}px
   height: calc(100vh - var(--top-offset));
   margin-top: var(--top-offset);
-  background-color: blue;
 `;

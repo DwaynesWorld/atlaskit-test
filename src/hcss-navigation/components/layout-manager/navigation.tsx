@@ -201,7 +201,6 @@ const NavigationContainer = styled.div<NavigationContainerProps>`
   bottom: 0px;
   left: 0px;
   z-index: ${NAVIGATION_LAYER_ZINDEX};
-  background-color: red;
 
   &:hover .navigation-resize-button {
     opacity: 1;

@@ -80,8 +80,6 @@ const ContentCollapsed = styled.div<{ hasContext: boolean }>`
   transition: background-color 100ms;
 
   &:hover {
-    /* background-color: ${p =>
-      p.hasContext ? "#EBECF0" : "rgba(255, 255, 255, 0.08)"}; */
     background-color: rgba(255, 255, 255, 0.08);
   }
 

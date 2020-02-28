@@ -37,9 +37,6 @@ const Button = styled.button`
   padding: 4px;
   border-radius: 3px;
   border-width: 0px;
-  border-style: initial;
-  border-color: initial;
-  border-image: initial;
   background: none;
 
   &:focus {
@@ -53,5 +50,5 @@ const NameContainer = styled.div`
   align-items: center;
   padding-right: 16px;
   margin-right: 6px;
-  border-right: 1px solid rgba(107, 119, 140, 0.3);
+  border-right: 0px solid rgba(107, 119, 140, 0.3);
 `;
