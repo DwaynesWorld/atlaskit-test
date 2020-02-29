@@ -5,7 +5,7 @@ import { ComponentType, useState, Fragment, useEffect, ReactNode } from "react";
 import { ModuleNavigationWrapper } from "./module-navigation-wrapper";
 import { ContextNavigationWrapper } from "./context-navigation-wrapper";
 import { transitionDurationMs } from "hcss-navigation/common/constants";
-import { useIsMounted } from "hcss-navigation/common/is-mounted";
+import { useIsMounted } from "hcss-navigation/common/use-is-mounted";
 
 interface DynamicNavigationProps {
   isVisible: boolean;
@@ -20,19 +20,10 @@ export const DynamicNavigation = React.memo(
     moduleNavigation,
     hideNavVisuallyOnCollapse
   }: DynamicNavigationProps) => {
-    // TODO: Do we need this?
-    // prettier-ignore
-    const [cachedContextNavigation, setCachedContextNavigation] = useState<ComponentType<any>>();
     const isMounted = useIsMounted();
 
-    useEffect(() => {
-      if (contextNavigation && contextNavigation !== cachedContextNavigation) {
-        setCachedContextNavigation(contextNavigation);
-      }
-    }, [contextNavigation, cachedContextNavigation]);
-
     const shouldRenderContext = contextNavigation ? true : false;
-    const ContextNavigation = cachedContextNavigation || Fragment;
+    const ContextNavigation = contextNavigation || Fragment;
     const ModuleNavigation = moduleNavigation;
 
     return (

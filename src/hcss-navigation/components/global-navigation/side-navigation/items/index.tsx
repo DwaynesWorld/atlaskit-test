@@ -1,4 +1,4 @@
-import React, { ReactNode, Fragment, ReactElement } from "react";
+import React, { Fragment, ReactNode } from "react";
 import styled, { css } from "styled-components";
 import { GLOBAL_SIDE_NAV_WIDTH } from "hcss-navigation/common/constants";
 import { ConcreteColors } from "hcss-components";
@@ -9,7 +9,7 @@ interface SideNavigationMenuItemProps {
     This can either be the font awesome name of the icon,
     or an Icon component to render.
    */
-  icon?: string | ReactElement;
+  icon?: string | ReactNode;
   /** 
     Inline styles applied the item container.
    */
@@ -40,20 +40,26 @@ export const SideNavigationMenuItem = ({
   buttonBackgroundColor,
   onClick
 }: SideNavigationMenuItemProps) => {
-  const Icon =
-    typeof icon === "string"
-      ? () => <i className={`side-nav-icon fa fa-${icon}`} aria-hidden="true" />
-      : () => <Fragment>{icon}</Fragment>;
+  const renderOther = (other?: string | ReactNode) => {
+    if (other === undefined) return null;
+
+    if (typeof other === "string") {
+      return <i className={`section-item-icon fa fa-${other}`} />;
+    }
+
+    return <Fragment>{other}</Fragment>;
+  };
 
   return (
-    <ItemWrapper style={itemContainerStyle}>
+    <ItemWrapper className="side-nav-item-wrapper" style={itemContainerStyle}>
       <Button
+        className="side-nav-item-button"
         isSelected={isSelected}
         buttonColor={buttonColor}
         buttonBackgroundColor={buttonBackgroundColor}
         style={buttonStyle}
         onClick={onClick}>
-        <Icon />
+        {renderOther(icon)}
       </Button>
     </ItemWrapper>
   );
@@ -86,7 +92,8 @@ const Button = styled.button<ButtonProps>`
     p.isSelected
       ? css`
           color: ${p.buttonColor?.selected ?? ConcreteColors.blue200};
-          background-color: ${p.buttonBackgroundColor?.selected ?? "white"};
+          background-color: ${p.buttonBackgroundColor?.selected ??
+            "transparent"};
         `
       : css`
           color: ${p.buttonColor?.default ?? ConcreteColors.gray400};
@@ -111,7 +118,7 @@ const Button = styled.button<ButtonProps>`
       p.buttonBackgroundColor?.hover ?? ConcreteColors.gray200}; */
   }
 
-  i.side-nav-icon {
-    font-size: 24px;
+  i.section-item-icon {
+    font-size: 22px;
   }
 `;

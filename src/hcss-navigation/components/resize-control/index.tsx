@@ -248,7 +248,7 @@ export class ResizeControl extends React.Component<
     const Icon = isCollapsed ? ChevronRight : ChevronLeft;
 
     return (
-      <OuterControl>
+      <OuterControl className="resize-control">
         {isDragging && <DragCursor />}
         <Shadow direction={shadowDirection} isBold={mouseIsDown} />
         {!isResizeDisabled && (
@@ -263,6 +263,7 @@ export class ResizeControl extends React.Component<
               />
             )}
             <div
+              className="toggle-button-container"
               onMouseOver={!flyoutIsOpen ? onMouseOverButtonBuffer : undefined}>
               <ToggleButton
                 isVisible={isCollapsed || mouseIsDown}

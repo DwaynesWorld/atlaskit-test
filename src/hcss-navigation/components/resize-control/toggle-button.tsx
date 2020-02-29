@@ -18,7 +18,7 @@ export const ToggleButton = ({
 }: ToggleButtonProps) => {
   return (
     <Button
-      className="navigation-resize-button"
+      className="toggle-button"
       type="button"
       ref={r => (buttonRef.current = r || undefined)}
       hasHighlight={hasHighlight}

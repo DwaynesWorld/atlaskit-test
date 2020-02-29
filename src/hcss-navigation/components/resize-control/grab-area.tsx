@@ -14,8 +14,12 @@ export const GrabArea = ({
   ...props
 }: GrabAreaProps & InnerGrabAreaProps) => {
   return (
-    <OuterGrabArea {...props}>
-      <InnerGrabArea isBold={isBold} showHandle={showHandle} />
+    <OuterGrabArea className="outer-grab-area" {...props}>
+      <InnerGrabArea
+        className="inner-grab-area"
+        isBold={isBold}
+        showHandle={showHandle}
+      />
     </OuterGrabArea>
   );
 };

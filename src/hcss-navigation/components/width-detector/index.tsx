@@ -101,6 +101,7 @@ export default class WidthDetector extends React.Component<Props, State> {
     // @TODO: Add alternative method using IntersectionObserver or ResizeObserver
     const sizerEl = (
       <object
+        className="width-detector-sizer"
         type="text/html"
         style={sizerStyle}
         ref={this.handleObjectRef}
@@ -121,6 +122,7 @@ export default class WidthDetector extends React.Component<Props, State> {
 
     return (
       <div
+        className="width-detector"
         {...props}
         style={{ ...containerDivStyle, ...containerStyle }}
         ref={this.handleContainerRef}>

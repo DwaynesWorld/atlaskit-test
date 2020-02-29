@@ -17,13 +17,22 @@ export const GlobalSideNavigation = ({
   createButtonComponent: create
 }: GlobalSideNavigationProps) => {
   return (
-    <Container topOffset={topOffset} style={style}>
-      <PrimaryContainerWrapper>
-        {create && <CreateContainerWrapper>{create}</CreateContainerWrapper>}
+    <Container
+      className="global-side-nav-container"
+      topOffset={topOffset}
+      style={style}>
+      <PrimaryContainerWrapper className="global-side-nav-primary-container">
+        {create && (
+          <CreateContainerWrapper className="global-side-nav-create-container">
+            {create}
+          </CreateContainerWrapper>
+        )}
         {primaryItems}
       </PrimaryContainerWrapper>
 
-      <SecondaryContainerWrapper>{secondaryItems}</SecondaryContainerWrapper>
+      <SecondaryContainerWrapper className="global-side-nav-secondary-container">
+        {secondaryItems}
+      </SecondaryContainerWrapper>
     </Container>
   );
 };

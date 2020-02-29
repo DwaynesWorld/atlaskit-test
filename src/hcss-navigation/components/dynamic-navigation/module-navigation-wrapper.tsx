@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 import { DYNAMIC_NAV_WIDTH } from "hcss-navigation/common/constants";
+import { ConcreteColors } from "hcss-components";
 
 interface ModuleNavigationWrapperProps {
   isVisible: boolean;
@@ -11,8 +12,12 @@ export const ModuleNavigationWrapper = ({
   isVisible,
   children
 }: ModuleNavigationWrapperProps) => (
-  <Outer>
-    <Inner isVisible={isVisible} tabIndex={-1} role="group">
+  <Outer className="module-navigation-wrapper-outer">
+    <Inner
+      className="module-navigation-wrapper-inner"
+      isVisible={isVisible}
+      tabIndex={-1}
+      role="group">
       {children}
     </Inner>
   </Outer>
@@ -27,8 +32,8 @@ const Outer = styled.div`
   position: absolute;
   min-width: ${DYNAMIC_NAV_WIDTH}px;
   overflow-x: hidden;
-  background-color: #006644;
-  color: #ffffff;
+  background-color: ${ConcreteColors.gray200};
+  /* color: #ffffff; */
 
   &:not(:only-child) {
     z-index: -1;

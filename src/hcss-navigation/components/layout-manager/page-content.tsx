@@ -54,6 +54,7 @@ export const PageContent = ({
       onCollapseEnd={onCollapseEnd}>
       {({ transitionStyle, transitionState }) => (
         <PageWrapper
+          className="page-wrapper"
           ref={r => (pageRef.current = r || undefined)}
           disableInteraction={isResizing || isTransitioning(transitionState)}
           topOffset={topOffset}

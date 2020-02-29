@@ -52,7 +52,7 @@ export const LayoutManager = ({
   }, [controller.uiState.isCollapsed, flyoutIsOpen]);
 
   return (
-    <LayoutContainer topOffset={topOffset}>
+    <LayoutContainer className="layout-container" topOffset={topOffset}>
       <Navigation
         topOffset={topOffset}
         flyoutOnHover={flyoutOnHover}

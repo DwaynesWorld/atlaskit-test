@@ -11,9 +11,6 @@ export const ProductHome = ({
   productName,
   onClick
 }: ProductHomeProps) => {
-  console.log(icon);
-  console.log(productName);
-
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     onClick && onClick(e);

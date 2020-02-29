@@ -20,8 +20,8 @@ export const GlobalTopNavigation = ({
   createButtonComponent: Create
 }: GlobalTopNavigationProps) => {
   return (
-    <Container>
-      <PrimaryContainerWrapper>
+    <Container className="global-to-nav-container">
+      <PrimaryContainerWrapper className="global-top-nav-primary-container">
         {AppSwitcher && <AppSwitcher />}
         {ProductHome && <ProductHome />}
 
@@ -32,7 +32,9 @@ export const GlobalTopNavigation = ({
         />
       </PrimaryContainerWrapper>
 
-      <SecondaryContainerWrapper>{secondaryItems}</SecondaryContainerWrapper>
+      <SecondaryContainerWrapper className="global-top-nav-secondary-container">
+        {secondaryItems}
+      </SecondaryContainerWrapper>
     </Container>
   );
 };

@@ -22,7 +22,7 @@ export const ComposedGlobalSideNavigation = ({
 
   return (
     <div
-      className="ComposedGlobalSideNavigation"
+      className="composed-global-side-navigation"
       onMouseOver={alternateFlyoutBehaviour ? closeFlyout : undefined}>
       <Fragment>
         {!shouldHideSideGlobalNavShadow && (

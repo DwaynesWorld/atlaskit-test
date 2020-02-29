@@ -23,3 +23,13 @@ export const RESIZE_CONTROL_HANDLE_WIDTH = 2;
 export const RESIZE_CONTROL_INNER_WIDTH = 20;
 export const RESIZE_CONTROL_OUTER_WIDTH =
   RESIZE_CONTROL_INNER_WIDTH + RESIZE_CONTROL_HANDLE_OFFSET;
+
+export const SCROLL_HINT_HEIGHT = 2;
+export const SCROLL_HINT_SPACING = 16;
+export const SCROLL_BAR_SIZE =
+  (typeof window !== "undefined" &&
+    window.navigator.userAgent.indexOf("Gecko") >= 0) ||
+  (typeof window !== "undefined" &&
+    window.navigator.userAgent.indexOf("AppleWebKit") >= 0)
+    ? 0
+    : 30;

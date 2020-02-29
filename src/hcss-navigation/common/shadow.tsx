@@ -22,6 +22,7 @@ export const Shadow = ({
 
   return (
     <Container
+      className="ShadowContainer"
       left={left}
       background={background}
       width={width}

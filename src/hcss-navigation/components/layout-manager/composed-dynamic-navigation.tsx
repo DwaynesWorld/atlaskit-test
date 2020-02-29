@@ -35,12 +35,11 @@ export const ComposedDynamicNavigation = ({
 
   return (
     <DynamicNavigationWrapper
-      key="dynamic-nav-wrapper"
+      className="composed-dynamic-nav-wrapper"
       ref={ref => (moduleNavigationRef.current = ref || undefined)}
       disableInteraction={disableInteraction}
       style={transitionStyle}>
       <DynamicNavigation
-        key="dynamic-nav"
         isVisible={isVisible}
         hideNavVisuallyOnCollapse={hideNavVisuallyOnCollapse}
         moduleNavigation={moduleNavigation}
@@ -48,6 +47,7 @@ export const ComposedDynamicNavigation = ({
       />
       {isCollapsed && !flyoutOnHover && (
         <ContentCollapsed
+          className="composed-dynamic-nav-content-collapsed"
           role="button"
           tabIndex={-1}
           onClick={expand}

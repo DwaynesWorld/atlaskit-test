@@ -19,8 +19,13 @@ export const ContextNavigationWrapper = ({
   children
 }: ContextNavigationWrapperProps) => {
   return (
-    <Outer isEntering={isEntering} isExiting={isExiting}>
-      <Inner isVisible={isVisible}>{children}</Inner>
+    <Outer
+      className="context-navigation-wrapper-outer"
+      isEntering={isEntering}
+      isExiting={isExiting}>
+      <Inner className="context-navigation-wrapper-inner" isVisible={isVisible}>
+        {children}
+      </Inner>
     </Outer>
   );
 };

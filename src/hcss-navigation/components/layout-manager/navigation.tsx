@@ -106,17 +106,21 @@ export const Navigation = ({
       onItemDragStart={() => setItemIsDragging(true)}
       onItemDragEnd={() => setItemIsDragging(false)}>
       {GlobalTopNavigation && (
-        <HorizontalNavigationContainer topOffset={topOffset}>
+        <TopNavigationContainer
+          className="top-navigation-container"
+          topOffset={topOffset}>
           <GlobalTopNavigation />
-        </HorizontalNavigationContainer>
+        </TopNavigationContainer>
       )}
       <NavigationContainer
+        className="navigation-container"
         ref={ref => (navigationRef.current = ref || undefined)}
         topOffset={navContainerTopOffset}
         onMouseOver={alternateFlyoutBehaviour ? onMouseOver : undefined}
         onMouseOut={onMouseOut}
         onMouseLeave={onMouseLeave}>
         <NavigationContainerMask
+          className="navigation-container-mask"
           disableInteraction={itemIsDragging}
           onMouseOver={alternateFlyoutBehaviour ? undefined : onMouseOver}>
           <RenderBlocker blockOnChange itemIsDragging={itemIsDragging}>
@@ -202,12 +206,12 @@ const NavigationContainer = styled.div<NavigationContainerProps>`
   left: 0px;
   z-index: ${NAVIGATION_LAYER_ZINDEX};
 
-  &:hover .navigation-resize-button {
+  &:hover .toggle-button {
     opacity: 1;
   }
 `;
 
-const HorizontalNavigationContainer = styled.div<NavigationContainerProps>`
+const TopNavigationContainer = styled.div<NavigationContainerProps>`
   --top-offset: ${props => (props.topOffset ? props.topOffset : 0)}px
 
   position: fixed;

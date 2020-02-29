@@ -11,6 +11,7 @@ import { Quotes } from "./pages/quotes";
 import { Messages } from "./pages/messages";
 import { TopNavigation } from "app-top-navigation";
 import { SideNavigation } from "app-side-navigation";
+import { ModuleNavigation } from "app-module-navigation";
 
 export const App = () => {
   return (
@@ -21,13 +22,13 @@ export const App = () => {
           flyoutOnHover={true}
           fullWidthFlyout={true}
           hideNavVisuallyOnCollapse={false}
-          shouldHideGlobalNavShadow={true}
+          shouldHideGlobalNavShadow={false}
           showContextualNavigation={true}
           alternateFlyoutBehaviour={false}
           globalTopNavigation={TopNavigation}
           globalSideNavigation={SideNavigation}
-          moduleNavigation={() => null}
-          contextNavigation={() => null}>
+          moduleNavigation={ModuleNavigation}
+          contextNavigation={undefined}>
           <ContentWrapper>
             <Switch>
               <Route exact path="/contacts" component={Contacts} />
@@ -53,3 +54,7 @@ const FullHeightContainer = styled.div`
   height: 100vh;
   margin-top: 0;
 `;
+
+const ContextNavigation = () => {
+  return <div>something</div>;
+};

@@ -18,11 +18,13 @@ export const SideNavigation = () => {
       createButtonComponent={<CreateItem />}
       primaryItems={[
         <SideNavigationMenuItem
+          key="dashboard"
           onClick={() => history.push("/")}
           isSelected={currentPath === "/"}
           icon={<DashboardIcon isSelected={currentPath === "/"} />}
         />,
         <SideNavigationMenuItem
+          key="projects"
           onClick={() => history.push("/projects")}
           isSelected={currentPath.startsWith("/projects")}
           icon={
@@ -30,6 +32,7 @@ export const SideNavigation = () => {
           }
         />,
         <SideNavigationMenuItem
+          key="estimates"
           onClick={() => history.push("/estimates")}
           isSelected={currentPath.startsWith("/estimates")}
           icon={
@@ -37,11 +40,13 @@ export const SideNavigation = () => {
           }
         />,
         <SideNavigationMenuItem
+          key="quotes"
           onClick={() => history.push("/quotes")}
           isSelected={currentPath.startsWith("/quotes")}
           icon={<QuotesIcon isSelected={currentPath.startsWith("/quotes")} />}
         />,
         <SideNavigationMenuItem
+          key="messages"
           onClick={() => history.push("/messages")}
           isSelected={currentPath.startsWith("/messages")}
           icon={
@@ -49,6 +54,7 @@ export const SideNavigation = () => {
           }
         />,
         <SideNavigationMenuItem
+          key="contacts"
           onClick={() => history.push("/contacts")}
           isSelected={currentPath.startsWith("/contacts")}
           icon={
