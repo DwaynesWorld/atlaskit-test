@@ -15,6 +15,7 @@ export interface UIController {
     isResizing: boolean;
     isResizeDisabled: boolean;
     moduleNavWidth: number;
+    flyoutIsOpen: boolean;
     isCollapsed: boolean;
   };
   collapse: () => void;
@@ -24,9 +25,11 @@ export interface UIController {
   manualResizeEnd: (resize: Resize) => void;
   enableResize: () => void;
   disableResize: () => void;
+  setFlyoutIsOpen: (isOpen: boolean) => void;
 }
 
 export const useUIController = (initialState: UIState): UIController => {
+  const [flyoutIsOpen, _setFlyoutIsOpen] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
   const [isResizeDisabled, setIsResizeDisabled] = useState(
@@ -48,6 +51,8 @@ export const useUIController = (initialState: UIState): UIController => {
     isCollapsed
   );
 
+  const setFlyoutIsOpen = (isOpen: boolean) => _setFlyoutIsOpen(isOpen);
+
   const collapse = () => {
     if (isResizeDisabled) return;
     setIsCollapsed(true);
@@ -61,6 +66,14 @@ export const useUIController = (initialState: UIState): UIController => {
   const toggleCollapse = () => {
     const toggle = isCollapsed ? expand : collapse;
     toggle();
+
+    // When we are in a previous state where a hover
+    // caused the flyout to open and now it menu has been
+    // toggled to stay open. The flyout state should be
+    // reset to false.
+    if (isCollapsed && flyoutIsOpen) {
+      setFlyoutIsOpen(false);
+    }
   };
 
   const manualResizeStart = ({ moduleNavWidth, isCollapsed }: Resize) => {
@@ -89,13 +102,20 @@ export const useUIController = (initialState: UIState): UIController => {
   };
 
   return {
-    uiState: { isResizing, isResizeDisabled, moduleNavWidth, isCollapsed },
+    uiState: {
+      isResizing,
+      isResizeDisabled,
+      moduleNavWidth,
+      isCollapsed,
+      flyoutIsOpen
+    },
     collapse,
     expand,
     toggleCollapse,
     manualResizeStart,
     manualResizeEnd,
     enableResize,
-    disableResize
+    disableResize,
+    setFlyoutIsOpen
   };
 };

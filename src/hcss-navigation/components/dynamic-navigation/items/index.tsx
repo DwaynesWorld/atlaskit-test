@@ -1,4 +1,4 @@
-import React, { ReactNode, ComponentType, Fragment } from "react";
+import React, { ReactNode, Fragment } from "react";
 import styled from "styled-components";
 
 interface ItemProps {

@@ -1,7 +1,7 @@
 import React from "react";
 import deepEqual from "react-fast-compare";
 import { Transition } from "react-transition-group";
-import { ComponentType, useState, Fragment, useEffect, ReactNode } from "react";
+import { ComponentType, Fragment, ReactNode } from "react";
 import { ModuleNavigationWrapper } from "./module-navigation-wrapper";
 import { ContextNavigationWrapper } from "./context-navigation-wrapper";
 import { transitionDurationMs } from "hcss-navigation/common/constants";

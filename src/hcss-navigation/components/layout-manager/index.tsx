@@ -1,18 +1,17 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { ReactNode, ComponentType } from "react";
 import { Navigation } from "./navigation";
 import { CollapseListeners } from "../../models/collapse-listener";
 import { PageContent } from "./page-content";
-import { useNavigationControllerContext } from "hcss-navigation/contexts/navigation-controller-context";
 
 export interface LayoutManagerProps extends CollapseListeners {
   topOffset?: number;
   flyoutOnHover: boolean;
   fullWidthFlyout: boolean;
   hideNavVisuallyOnCollapse: boolean;
-  shouldHideGlobalNavShadow: boolean;
-  showContextualNavigation: boolean;
+  showGlobalSideNavShadow: boolean;
+  useDynamicNavigation: boolean;
   alternateFlyoutBehaviour: boolean;
   globalTopNavigation?: ComponentType<{}>;
   globalSideNavigation?: ComponentType<{}>;
@@ -25,8 +24,8 @@ export const LayoutManager = ({
   flyoutOnHover,
   fullWidthFlyout,
   hideNavVisuallyOnCollapse,
-  shouldHideGlobalNavShadow,
-  showContextualNavigation,
+  showGlobalSideNavShadow,
+  useDynamicNavigation,
   alternateFlyoutBehaviour,
   globalTopNavigation,
   globalSideNavigation,
@@ -40,28 +39,16 @@ export const LayoutManager = ({
 }: LayoutManagerProps) => {
   const pageRef = useRef<HTMLDivElement>();
   const toggleButtonRef = useRef<HTMLButtonElement>();
-  const controller = useNavigationControllerContext();
-  const [flyoutIsOpen, setFlyoutIsOpen] = useState(false);
-
-  useEffect(() => {
-    // This happens on button click
-    // TODO: Move flyout is open to controller
-    if (!controller.uiState.isCollapsed && flyoutIsOpen) {
-      setFlyoutIsOpen(false);
-    }
-  }, [controller.uiState.isCollapsed, flyoutIsOpen]);
 
   return (
     <LayoutContainer className="layout-container" topOffset={topOffset}>
       <Navigation
         topOffset={topOffset}
         flyoutOnHover={flyoutOnHover}
-        flyoutIsOpen={flyoutIsOpen}
-        setFlyoutIsOpen={o => setFlyoutIsOpen(o)}
         fullWidthFlyout={fullWidthFlyout}
         hideNavVisuallyOnCollapse={hideNavVisuallyOnCollapse}
-        shouldHideGlobalNavShadow={shouldHideGlobalNavShadow}
-        showContextualNavigation={showContextualNavigation}
+        showGlobalSideNavShadow={showGlobalSideNavShadow}
+        useDynamicNavigation={useDynamicNavigation}
         alternateFlyoutBehaviour={alternateFlyoutBehaviour}
         globalTopNavigation={globalTopNavigation}
         globalSideNavigation={globalSideNavigation}
@@ -71,8 +58,7 @@ export const LayoutManager = ({
         pageRef={pageRef}
       />
       <PageContent
-        flyoutIsOpen={flyoutIsOpen}
-        showContextualNavigation={showContextualNavigation}
+        useDynamicNavigation={useDynamicNavigation}
         useGlobalTopNavigation={globalTopNavigation !== undefined}
         useGlobalSideNavigation={globalSideNavigation !== undefined}
         onExpandStart={onExpandStart}

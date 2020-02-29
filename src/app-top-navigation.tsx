@@ -1,6 +1,5 @@
 import React, { memo } from "react";
-import { useLocation, useHistory } from "react-router-dom";
-import { TopNavigationButton } from "hcss-navigation/components/global-navigation/top-navigation/items";
+import { useHistory } from "react-router-dom";
 import { ProfileMenu } from "./hcss-navigation/components/global-navigation/top-navigation/items/profile-menu";
 import { HelpMenu } from "./hcss-navigation/components/global-navigation/top-navigation/items/help-menu";
 import { SettingsMenu } from "./hcss-navigation/components/global-navigation/top-navigation/items/settings-menu";
@@ -8,8 +7,8 @@ import { ProductHome } from "hcss-navigation/components/global-navigation/top-na
 import { GlobalTopNavigation } from "hcss-navigation/components/global-navigation";
 
 export const TopNavigation = memo(() => {
-  const location = useLocation();
-  const history = useHistory();
+  // const location = useLocation();
+  // const history = useHistory();
 
   return (
     <GlobalTopNavigation

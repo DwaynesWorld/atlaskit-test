@@ -9,6 +9,7 @@ import styled from "styled-components";
 
 export const ModuleNavigation = () => {
   const location = useLocation();
+
   if (location.pathname.startsWith("/projects")) {
     return <ProjectTrackingModule />;
   }

@@ -98,7 +98,7 @@ export default class WidthDetector extends React.Component<Props, State> {
   };
 
   render() {
-    // @TODO: Add alternative method using IntersectionObserver or ResizeObserver
+    // TODO: Check this impl, should be a better way
     const sizerEl = (
       <object
         className="width-detector-sizer"

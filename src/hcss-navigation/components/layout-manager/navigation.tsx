@@ -25,11 +25,9 @@ interface NavigationProps {
   flyoutOnHover: boolean;
   fullWidthFlyout: boolean;
   hideNavVisuallyOnCollapse: boolean;
-  shouldHideGlobalNavShadow: boolean;
-  showContextualNavigation: boolean;
+  showGlobalSideNavShadow: boolean;
+  useDynamicNavigation: boolean;
   alternateFlyoutBehaviour: boolean;
-  flyoutIsOpen: boolean;
-  setFlyoutIsOpen: (open: boolean) => void;
   pageRef: MutableRefObject<HTMLDivElement | undefined>;
   toggleButtonRef: MutableRefObject<HTMLButtonElement | undefined>;
   globalTopNavigation?: ComponentType<{}>;
@@ -40,12 +38,10 @@ interface NavigationProps {
 export const Navigation = ({
   topOffset,
   flyoutOnHover,
-  flyoutIsOpen,
-  setFlyoutIsOpen,
   fullWidthFlyout,
   hideNavVisuallyOnCollapse,
-  shouldHideGlobalNavShadow,
-  showContextualNavigation,
+  showGlobalSideNavShadow,
+  useDynamicNavigation,
   alternateFlyoutBehaviour,
   pageRef,
   toggleButtonRef,
@@ -58,8 +54,8 @@ export const Navigation = ({
   const moduleNavigationRef = useRef<HTMLDivElement>();
   const flyoutTimeout = useRef<number>();
   const controller = useNavigationControllerContext();
-  const { uiState, expand } = controller;
-  const { isCollapsed, isResizing, moduleNavWidth } = uiState;
+  const { uiState, expand, setFlyoutIsOpen } = controller;
+  const { isCollapsed, isResizing, moduleNavWidth, flyoutIsOpen } = uiState;
   const [itemIsDragging, setItemIsDragging] = useState(false);
 
   const GlobalTopNavigation = globalTopNavigation;
@@ -135,7 +131,7 @@ export const Navigation = ({
                     globalSideNavigation={globalSideNavigation}
                     contextNavigation={contextNavigation}
                     topOffset={topOffset}
-                    shouldHideSideGlobalNavShadow={shouldHideGlobalNavShadow}
+                    showGlobalSideNavShadow={showGlobalSideNavShadow}
                     alternateFlyoutBehaviour={alternateFlyoutBehaviour}
                     closeFlyout={closeFlyout}
                   />
@@ -143,14 +139,8 @@ export const Navigation = ({
               )}
 
               <ResizeTransition
-                from={[
-                  showContextualNavigation ? DYNAMIC_NAV_WIDTH_COLLAPSED : 0
-                ]}
-                in={
-                  showContextualNavigation
-                    ? !isCollapsed || flyoutIsOpen
-                    : false
-                }
+                from={[useDynamicNavigation ? DYNAMIC_NAV_WIDTH_COLLAPSED : 0]}
+                in={useDynamicNavigation ? !isCollapsed || flyoutIsOpen : false}
                 properties={["width"]}
                 to={[flyoutIsOpen ? flyoutWidth : moduleNavWidth]}
                 userIsDragging={isResizing}>
@@ -172,7 +162,7 @@ export const Navigation = ({
             </Fragment>
           </RenderBlocker>
         </NavigationContainerMask>
-        {showContextualNavigation && (
+        {useDynamicNavigation && (
           <ResizeControl
             controller={controller}
             flyoutOnHover={flyoutOnHover}

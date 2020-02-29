@@ -4,7 +4,7 @@ import { Shadow } from "../../common/shadow";
 
 interface ComposedGlobalSideNavigationProps {
   topOffset?: number;
-  shouldHideSideGlobalNavShadow?: boolean;
+  showGlobalSideNavShadow?: boolean;
   alternateFlyoutBehaviour: boolean;
   contextNavigation?: ComponentType<{}>;
   globalSideNavigation: ComponentType<{}>;
@@ -12,7 +12,7 @@ interface ComposedGlobalSideNavigationProps {
 }
 
 export const ComposedGlobalSideNavigation = ({
-  shouldHideSideGlobalNavShadow,
+  showGlobalSideNavShadow = true,
   alternateFlyoutBehaviour,
   contextNavigation,
   globalSideNavigation,
@@ -25,7 +25,7 @@ export const ComposedGlobalSideNavigation = ({
       className="composed-global-side-navigation"
       onMouseOver={alternateFlyoutBehaviour ? closeFlyout : undefined}>
       <Fragment>
-        {!shouldHideSideGlobalNavShadow && (
+        {showGlobalSideNavShadow && (
           <Shadow
             direction="to left"
             isBold={!!contextNavigation}

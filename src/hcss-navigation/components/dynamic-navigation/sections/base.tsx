@@ -1,22 +1,16 @@
-import React, {
-  useState,
-  Fragment,
-  Children,
-  ReactNode,
-  useEffect,
-  useCallback
-} from "react";
+import React, { useState, Fragment, ReactNode, useCallback } from "react";
 import styled from "styled-components";
 import { TransitionGroup, Transition } from "react-transition-group";
 import { useIsMounted } from "hcss-navigation/common/use-is-mounted";
+import { usePrevious } from "hcss-navigation/common/use-previous";
+import { getAnimationStyles } from "./get-animation-styles";
 import {
   transitionDurationMs,
   SCROLL_HINT_HEIGHT,
   SCROLL_BAR_SIZE,
   SCROLL_HINT_SPACING
 } from "hcss-navigation/common/constants";
-import { getAnimationStyles } from "./get-animation-styles";
-import { usePrevious } from "hcss-navigation/common/use-previous";
+
 export interface SectionProps {
   id?: string;
   parentId?: string;
@@ -36,6 +30,7 @@ export const Section = ({
   const prevId = usePrevious(id);
   const prevParentId = usePrevious(parentId);
 
+  // TODO: Check this impl
   useCallback(() => {
     if (parentId && parentId === prevId) {
       setTraversalDirection("down");
@@ -44,9 +39,6 @@ export const Section = ({
       setTraversalDirection("up");
     }
   }, [id, parentId, prevId, prevParentId]);
-
-  console.log(`prev: ${prevId} vs curr: ${id}`);
-  console.log(`prev: ${prevParentId} vs curr: ${parentId}`);
 
   const TransitionGroupComponent = shouldGrow
     ? ScrollableTransitionGroup

@@ -14,16 +14,14 @@ import {
 
 interface PageContentProps {
   pageRef: MutableRefObject<HTMLDivElement | undefined>;
-  flyoutIsOpen: boolean;
-  showContextualNavigation: boolean;
+  useDynamicNavigation: boolean;
   useGlobalTopNavigation: boolean;
   useGlobalSideNavigation: boolean;
   children: ReactNode;
 }
 export const PageContent = ({
   pageRef,
-  flyoutIsOpen,
-  showContextualNavigation,
+  useDynamicNavigation,
   useGlobalTopNavigation,
   useGlobalSideNavigation,
   onExpandStart,
@@ -33,19 +31,24 @@ export const PageContent = ({
   children
 }: PageContentProps & CollapseListeners) => {
   const controller = useNavigationControllerContext();
-  const { isCollapsed, moduleNavWidth, isResizing } = controller.uiState;
+  const {
+    isCollapsed,
+    moduleNavWidth,
+    isResizing,
+    flyoutIsOpen
+  } = controller.uiState;
 
-  // prettier-ignore
-  const expandedSize = flyoutIsOpen ? DYNAMIC_NAV_WIDTH_FLYOUT : moduleNavWidth;
-  const collapsedSize = 0;
   const topOffset = useGlobalTopNavigation ? GLOBAL_TOP_NAV_HEIGHT : 0;
   const leftOffset = useGlobalSideNavigation ? GLOBAL_SIDE_NAV_WIDTH : 0;
+  const expandedSize = flyoutIsOpen ? DYNAMIC_NAV_WIDTH_FLYOUT : moduleNavWidth;
+  const from = useDynamicNavigation ? DYNAMIC_NAV_WIDTH_COLLAPSED : 0;
+  const to = useDynamicNavigation ? expandedSize : 0;
 
   return (
     <ResizeTransition
       in={!isCollapsed}
-      from={[DYNAMIC_NAV_WIDTH_COLLAPSED]}
-      to={[showContextualNavigation ? expandedSize : collapsedSize]}
+      from={[from]}
+      to={[to]}
       properties={["paddingLeft"]}
       userIsDragging={isResizing}
       onExpandStart={onExpandStart}

@@ -21,9 +21,9 @@ export const App = () => {
           topOffset={0}
           flyoutOnHover={true}
           fullWidthFlyout={true}
-          hideNavVisuallyOnCollapse={false}
-          shouldHideGlobalNavShadow={false}
-          showContextualNavigation={true}
+          hideNavVisuallyOnCollapse={true}
+          showGlobalSideNavShadow={true}
+          useDynamicNavigation={true}
           alternateFlyoutBehaviour={false}
           globalTopNavigation={TopNavigation}
           globalSideNavigation={SideNavigation}
@@ -55,6 +55,6 @@ const FullHeightContainer = styled.div`
   margin-top: 0;
 `;
 
-const ContextNavigation = () => {
-  return <div>something</div>;
-};
+// const ContextNavigation = () => {
+//   return <div>something</div>;
+// };

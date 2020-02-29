@@ -8,7 +8,7 @@ const DEFAULT_UI_STATE: UIState = {
   moduleNavWidth: DYNAMIC_NAV_WIDTH,
   isResizeDisabled: false
 };
-// TODO: Allow users to specify default nav state
+// TODO: Allow consumers to specify default nav state
 const useNavigationController = () => {
   const controller = useUIController(DEFAULT_UI_STATE);
 
