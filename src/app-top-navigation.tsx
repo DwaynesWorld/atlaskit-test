@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { TopNavigationButton } from "hcss-navigation/components/global-navigation/top-navigation/items";
 import { ProfileMenu } from "./hcss-navigation/components/global-navigation/top-navigation/items/profile-menu";
@@ -7,7 +7,7 @@ import { SettingsMenu } from "./hcss-navigation/components/global-navigation/top
 import { ProductHome } from "hcss-navigation/components/global-navigation/top-navigation/items/product-home";
 import { GlobalTopNavigation } from "hcss-navigation/components/global-navigation";
 
-export const TopNavigation = () => {
+export const TopNavigation = memo(() => {
   const location = useLocation();
   const history = useHistory();
 
@@ -50,9 +50,9 @@ export const TopNavigation = () => {
       ]}
     />
   );
-};
+});
 
-const ProductHomeComponent = () => {
+const ProductHomeComponent = memo(() => {
   const history = useHistory();
 
   return (
@@ -71,4 +71,4 @@ const ProductHomeComponent = () => {
       onClick={() => history.push("/")}
     />
   );
-};
+});

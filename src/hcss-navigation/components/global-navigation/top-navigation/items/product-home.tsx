@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode } from "react";
+import React, { Fragment, ReactNode, memo } from "react";
 import styled from "styled-components";
 
 interface ProductHomeProps {
@@ -6,23 +6,25 @@ interface ProductHomeProps {
   productName?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
-export const ProductHome = ({
-  icon,
-  productName,
-  onClick
-}: ProductHomeProps) => {
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    onClick && onClick(e);
-  };
+export const ProductHome = memo(
+  ({ icon, productName, onClick }: ProductHomeProps) => {
+    const handleClick = (
+      e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+      e.preventDefault();
+      onClick && onClick(e);
+    };
 
-  return (
-    <Fragment>
-      <Button onClick={handleClick}>{icon}</Button>
-      {productName && <NameContainer className="">{productName}</NameContainer>}
-    </Fragment>
-  );
-};
+    return (
+      <Fragment>
+        <Button onClick={handleClick}>{icon}</Button>
+        {productName && (
+          <NameContainer className="">{productName}</NameContainer>
+        )}
+      </Fragment>
+    );
+  }
+);
 
 const Button = styled.button`
   margin: 0 5px;

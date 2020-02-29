@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import {
   HeaderSection,
   MenuSection
@@ -21,6 +21,8 @@ export const ModuleNavigation = () => {
 };
 
 const ProjectTrackingModule = () => {
+  const history = useHistory();
+
   return (
     <div className="project-tracking-navigation-module">
       <HeaderSection>
@@ -41,19 +43,19 @@ const ProjectTrackingModule = () => {
               key="project-list"
               before="th-list"
               text="Project List"
-              onClick={() => console.log("something clicked")}
+              onClick={() => history.push("/projects")}
             />
             <Item
               key="import-projects"
               before="cloud-upload"
-              onClick={() => console.log("something clicked")}
               text="Import Projects"
+              onClick={() => history.push("/projects/import")}
             />
             <Item
               key="customize-projects"
               before="cogs"
-              onClick={() => console.log("something clicked")}
               text="Customize Projects"
+              onClick={() => history.push("/projects/customize")}
             />
           </div>
         )}
@@ -63,6 +65,8 @@ const ProjectTrackingModule = () => {
 };
 
 const EstimatingModule = () => {
+  const history = useHistory();
+
   return (
     <div className="project-tracking-navigation-module">
       <HeaderSection>
@@ -83,7 +87,7 @@ const EstimatingModule = () => {
               key="estimate-list"
               before="th-list"
               text="Estimate List"
-              onClick={() => console.log("something clicked")}
+              onClick={() => history.push("/estimates")}
             />
           </div>
         )}

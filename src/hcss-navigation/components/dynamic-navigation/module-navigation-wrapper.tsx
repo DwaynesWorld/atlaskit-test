@@ -32,8 +32,8 @@ const Outer = styled.div`
   position: absolute;
   min-width: ${DYNAMIC_NAV_WIDTH}px;
   overflow-x: hidden;
-  background-color: ${ConcreteColors.gray200};
-  /* color: #ffffff; */
+  background-color: white;
+  /*${ConcreteColors.gray200}; color: #ffffff; */
 
   &:not(:only-child) {
     z-index: -1;
