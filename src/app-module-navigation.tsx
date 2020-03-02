@@ -1,11 +1,11 @@
 import React from "react";
+import styled from "styled-components";
 import { useLocation, useHistory } from "react-router-dom";
+import { Item } from "hcss-navigation/components/dynamic-navigation/items";
 import {
   HeaderSection,
   MenuSection
 } from "hcss-navigation/components/dynamic-navigation/sections";
-import { Item } from "hcss-navigation/components/dynamic-navigation/items";
-import styled from "styled-components";
 
 export const ModuleNavigation = () => {
   const location = useLocation();

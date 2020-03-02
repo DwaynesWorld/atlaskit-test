@@ -55,7 +55,7 @@ const Container = styled.div<{ topOffset: number }>`
 `;
 
 const CreateContainerWrapper = styled.div`
-  padding-bottom: 10px;
+  padding-bottom: 40px;
 `;
 
 const PrimaryContainerWrapper = styled.div`

@@ -3,6 +3,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import { ConcreteColors } from "hcss-components";
 import { GlobalSideNavigation } from "hcss-navigation/components/global-navigation";
 import { SideNavigationMenuItem } from "hcss-navigation/components/global-navigation/side-navigation/items";
+import { CreateItem } from "hcss-navigation/components/global-navigation/side-navigation/items/create";
 
 export const SideNavigation = () => {
   const currentPath = useLocation().pathname;
@@ -14,7 +15,7 @@ export const SideNavigation = () => {
       style={{
         backgroundColor: ConcreteColors.gray200
       }}
-      // createButtonComponent={<CreateItem />}
+      createButtonComponent={<CreateItem />}
       primaryItems={[
         <SideNavigationMenuItem
           key="dashboard"
